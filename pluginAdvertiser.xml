@@ -146,6 +146,14 @@
             </plugin>
           </value>
         </entry>
+        <entry key="*.cpt">
+          <value>
+            <plugin>
+              <option name="myPluginId" value="com.thoughtworks.gauge" />
+              <option name="myPluginName" value="Gauge" />
+            </plugin>
+          </value>
+        </entry>
         <entry key="*.dart">
           <value>
             <plugin>
@@ -667,6 +675,22 @@
             </plugin>
           </value>
         </entry>
+        <entry key="*.markdown">
+          <value>
+            <plugin>
+              <option name="myPluginId" value="org.intellij.plugins.markdown" />
+              <option name="myPluginName" value="Markdown" />
+            </plugin>
+          </value>
+        </entry>
+        <entry key="*.md">
+          <value>
+            <plugin>
+              <option name="myPluginId" value="org.intellij.plugins.markdown" />
+              <option name="myPluginName" value="Markdown" />
+            </plugin>
+          </value>
+        </entry>
         <entry key="*.mdb">
           <value>
             <plugin>
@@ -970,6 +994,14 @@
               <option name="myPluginId" value="com.intellij.java" />
               <option name="myPluginName" value="Java" />
               <option name="myBundled" value="true" />
+            </plugin>
+          </value>
+        </entry>
+        <entry key="*.spec">
+          <value>
+            <plugin>
+              <option name="myPluginId" value="com.thoughtworks.gauge" />
+              <option name="myPluginName" value="Gauge" />
             </plugin>
           </value>
         </entry>
