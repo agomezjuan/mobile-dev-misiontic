@@ -8,4 +8,17 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black2">#212121</color>
+
+
+    <color name="fondoLayauth">#FFEB3B</color>
+    <color name="colorPrimaryDark">#805345</color>
+    <color name="colorPrimary">#A82203</color>
+
+    <!-- BOTONES REDONDOS PROPIOS -->
+    <color name="btndegradesup1">#ff0000</color>
+    <color name="btndegradeinf1">#960500</color>
+    <color name="btntit1">#FFFFFF</color>
+    <color name="btndegradesup2">#FD8E64</color>
+    <color name="btndegradeinf2">#DF3902</color>
+    <color name="btntit2">#FFFFFF</color>
 </resources>
