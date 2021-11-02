@@ -54,9 +54,9 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/ic_btn_redondo1"
+            android:backgroundTint="@color/btndegradeinf1"
             android:text="Autorizar"
-            android:textColor="@color/btntit1" />
+            android:textColor="@color/white" />
         <CheckBox
             android:id="@+id/chbx_aceptcluf"
             android:layout_width="wrap_content"

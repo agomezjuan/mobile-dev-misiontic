@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -295,7 +296,7 @@ public class LosPermisos extends AppCompatActivity {
                     linea = br.readLine();
                 }
                 br.close();
-                mensajePermisos.setText(mDato);
+                mensajePermisos.setText(Html.fromHtml(mDato));
             } catch (IOException e) {
                 Toast.makeText(this, "No se pudo leer",
                         Toast.LENGTH_SHORT).show();
@@ -310,7 +311,7 @@ public class LosPermisos extends AppCompatActivity {
                     linea = br.readLine();
                 }
                 br.close();
-                mensajePermisos.setText(mDato);
+                mensajePermisos.setText(Html.fromHtml(mDato));
             } catch (IOException e) {
                 Toast.makeText(this, "No se pudo leer",
                         Toast.LENGTH_SHORT).show();
