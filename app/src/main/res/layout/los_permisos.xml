@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/activity_vertical_margin"
-    tools:context="Intro.LosPermisos"
+    tools:context="com.appvoto.tictaxi.Intro.LosPermisos"
     android:background="@color/fondoLayauth"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
@@ -54,7 +54,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint="@color/btndegradeinf1"
+            android:backgroundTint="@color/rojoscuro"
             android:text="Autorizar"
             android:textColor="@color/white" />
         <CheckBox

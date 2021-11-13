@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import Intro.LosPermisos;
-
 public class Home extends AppCompatActivity {
 
     @Override

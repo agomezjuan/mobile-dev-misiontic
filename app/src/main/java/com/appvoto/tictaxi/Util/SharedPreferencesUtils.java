@@ -1,7 +1,7 @@
-package Util;
+package com.appvoto.tictaxi.Util;
 
 
-import static Util.constante.PREFS_NAME;
+import static com.appvoto.tictaxi.Util.constante.PREFS_NAME;
 
 import android.content.Context;
 import android.content.SharedPreferences;

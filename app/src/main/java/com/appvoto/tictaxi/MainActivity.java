@@ -1,6 +1,6 @@
 package com.appvoto.tictaxi;
 
-import static Intro.LosPermisos.EXTRA_FCHPERM;
+import static com.appvoto.tictaxi.Intro.LosPermisos.EXTRA_FCHPERM;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,9 +12,9 @@ import android.provider.Settings;
 
 import java.util.Calendar;
 
-import Intro.LosPermisos;
-import Util.Device;
-import Util.SharedPreferencesUtils;
+import com.appvoto.tictaxi.Intro.LosPermisos;
+import com.appvoto.tictaxi.Util.Device;
+import com.appvoto.tictaxi.Util.SharedPreferencesUtils;
 
 /**
  * Created by miguelangelbuenoperez on 31/10/21...

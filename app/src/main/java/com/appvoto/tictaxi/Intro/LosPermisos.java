@@ -1,9 +1,9 @@
-package Intro;
+package com.appvoto.tictaxi.Intro;
 
 
-import static Util.constante.bckAppTicTaxi;
-import static Util.constante.inkAppTicTaxi;
-import static Util.constante.raizAppTicTaxi;
+import static com.appvoto.tictaxi.Util.constante.bckAppTicTaxi;
+import static com.appvoto.tictaxi.Util.constante.inkAppTicTaxi;
+import static com.appvoto.tictaxi.Util.constante.raizAppTicTaxi;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -25,8 +25,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.appvoto.tictaxi.MainActivity;
 import com.appvoto.tictaxi.R;
+import com.appvoto.tictaxi.Registro;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,8 +36,8 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import Util.Device;
-import Util.SharedPreferencesUtils;
+import com.appvoto.tictaxi.Util.Device;
+import com.appvoto.tictaxi.Util.SharedPreferencesUtils;
 
 /**
  * Created by miguelangelbuenoperez on 31/10/21...
@@ -176,18 +176,18 @@ public class LosPermisos extends AppCompatActivity {
                         break;
                     case "Aceptar el Data":
                         if (avis.isChecked()) {
-                            acepta.setText("iniciar TicTaxi");
+                            acepta.setText("Registrar");
                             titulopermisos.setText("INSCRIPCIÓN");
                             avis.setVisibility(View.INVISIBLE);
                             SharedPreferencesUtils.setvariable(LosPermisos.this, "AVIS", "OK");
-                            mensajePermisos.setText("Gracias por ser parte de TicTaxi © 2021\nSeguidamente lo invitamos a registrarse como Usuario PRINCIPAL y propietario de la base de datos que usted mismo cree.");
+                            mensajePermisos.setText("Opciones de Registro en TicTaxi© \n\n\t1.- Registro como Pasajero\n\n\t2.- Registro como Conductor.\n\n\nLas opciones suelen ser las mismas, lo que las difiere es que en Conductor, tú inscribes el vehículo de transporte.");
                         } else {
                             Toast.makeText(LosPermisos.this, "Por favor acepta el Aviso de Privacidad o cancela la instalación", Toast.LENGTH_LONG).show();
                         }
                         break;
-                    case "iniciar TicTaxi":
+                    case "Registrar":
                         SharedPreferencesUtils.disableFirstRun(LosPermisos.this);
-                        startActivity(new Intent(LosPermisos.this, MainActivity.class));
+                        startActivity(new Intent(LosPermisos.this, Registro.class));
                         finish();
                         break;
                     case "Contenido del CLUF":
@@ -318,5 +318,5 @@ public class LosPermisos extends AppCompatActivity {
             }
         }
     }
+    //endregion
 }
-//endregion

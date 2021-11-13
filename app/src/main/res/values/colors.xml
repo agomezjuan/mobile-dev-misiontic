@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFECB3</color>
-    <color name="purple_500">#FFC107</color>
-    <color name="purple_700">#FFA000</color>
-    <color name="teal_200">#795548</color>
-    <color name="teal_700">#FF018786</color>
+    <color name="amarillo_pastel">#FFECB3</color>
+    <color name="naranja_pastel">#FFC107</color>
+    <color name="naranja">#FFA000</color>
+    <color name="cafe">#795548</color>
+    <color name="azul_purpura">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black2">#212121</color>
@@ -15,10 +15,7 @@
     <color name="colorPrimary">#A82203</color>
 
     <!-- BOTONES REDONDOS PROPIOS -->
-    <color name="btndegradesup1">#ff0000</color>
-    <color name="btndegradeinf1">#960500</color>
-    <color name="btntit1">#FFFFFF</color>
-    <color name="btndegradesup2">#FD8E64</color>
-    <color name="btndegradeinf2">#DF3902</color>
-    <color name="btntit2">#FFFFFF</color>
+    <color name="rojo">#ff0000</color>
+    <color name="vinotinto">#960500</color>
+    <color name="rojoscuro">#DF3902</color>
 </resources>

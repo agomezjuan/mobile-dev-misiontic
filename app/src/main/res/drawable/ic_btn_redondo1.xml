@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <gradient
-        android:startColor="@color/btndegradesup1"
-        android:endColor="@color/btndegradeinf1"
+        android:startColor="@color/naranja"
+        android:endColor="@color/amarillo_pastel"
         android:angle="270"
         android:type="linear"/>
 

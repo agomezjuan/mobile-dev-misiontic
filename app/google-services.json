@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "654371226709",
+    "project_id": "tictaxi-2021",
+    "storage_bucket": "tictaxi-2021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654371226709:android:9e4b61aed54864c040c0dc",
+        "android_client_info": {
+          "package_name": "com.appvoto.tictaxi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "654371226709-vhq28te37etu50r6q5fj9djs695o6go8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appvoto.tictaxi",
+            "certificate_hash": "c148745bdb2017710b403e69cf6739fcfb2320d3"
+          }
+        },
+        {
+          "client_id": "654371226709-0si9s8o89f7cr16a4snjndsggm8u29l3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9OGniLg_jaCRgt14T79OS8FytVSbDs-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "654371226709-0si9s8o89f7cr16a4snjndsggm8u29l3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

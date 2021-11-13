@@ -1,16 +1,7 @@
-package Util;
+package com.appvoto.tictaxi.Util;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.provider.Settings;
-import android.telephony.TelephonyManager;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import java.util.UUID;
 
