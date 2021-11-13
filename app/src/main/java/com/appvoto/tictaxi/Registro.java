@@ -1,5 +1,8 @@
 package com.appvoto.tictaxi;
 
+import static com.appvoto.tictaxi.Home.EXTRA_CORREO;
+import static com.appvoto.tictaxi.Home.EXTRA_NOMBRES;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -18,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appvoto.tictaxi.Util.SharedPreferencesUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -41,11 +45,9 @@ public class Registro extends AppCompatActivity {
 
     TextInputEditText nombre, celular, correo, passw;
     TextView login_reg;
-    ImageView btn_google, btn_facebook;
     Button registro;
     FirebaseAuth auth;
     ProgressDialog dialogo;
-    GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +60,6 @@ public class Registro extends AppCompatActivity {
         passw = findViewById(R.id.et_passw_registro);
         registro = findViewById(R.id.btn_registrar);
         login_reg = findViewById(R.id.btn_login_reg);
-        btn_google = findViewById(R.id.btn_google_reg);
-        btn_facebook = findViewById(R.id.btn_facebook_reg);
 
 
         auth = FirebaseAuth.getInstance();
@@ -96,8 +96,12 @@ public class Registro extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
+                                SharedPreferencesUtils.setvariable(Registro.this, "NombreUs", usernombre);
+                                SharedPreferencesUtils.setvariable(Registro.this, "CelularUs", usercelular);
+                                SharedPreferencesUtils.setvariable(Registro.this, "CorreoUs", usercorreo);
+                                SharedPreferencesUtils.setvariable(Registro.this, "PasswUs", userpassw);
                                 dialogo.dismiss();
-                                startActivity(new Intent(Registro.this, Home.class));
+                                startActivity(new Intent(Registro.this, Home.class).putExtra(EXTRA_NOMBRES, usernombre).putExtra(EXTRA_CORREO, usercorreo));
                                 finish();
                             } else {
                                 dialogo.dismiss();
@@ -108,6 +112,7 @@ public class Registro extends AppCompatActivity {
                 }
             }
         });
+
         login_reg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,72 +122,5 @@ public class Registro extends AppCompatActivity {
         });
         //endregion
 
-        //region Configure Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        //endregion
-
-        btn_google.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                resultLauncher.launch(new Intent(mGoogleSignInClient.getSignInIntent()));
-            }
-        });
-
     }
-
-    //region Loguearse con Google...
-
-    ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult result) {
-            if(result.getResultCode() == Activity.RESULT_OK){
-                Intent intent = result.getData();
-                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(intent);
-                try {
-                    // Google Sign In was successful, authenticate with Firebase
-                    GoogleSignInAccount account = task.getResult(ApiException.class);
-                    assert account != null;
-                    firebaseAuthWithGoogle(account.getIdToken());
-                } catch (ApiException e) {
-                    // Google Sign In failed, update UI appropriately
-                }
-            }
-        }
-    });
-
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        auth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            startActivity(new Intent(Registro.this, Home.class));
-                            finish();
-                            Toast.makeText(Registro.this, "Registro exitoso...", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(Registro.this, "No se pudo loguear...", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-    //endregion
-
-
-    //region Al arrancar...
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if(auth.getCurrentUser() != null){
-            startActivity(new Intent(Registro.this, Home.class));
-            finish();
-        }
-    }
-    //endregion
-
 }

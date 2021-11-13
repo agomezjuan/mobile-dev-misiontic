@@ -22,6 +22,7 @@ public class Home extends AppCompatActivity {
     public static final String EXTRA_CORREO = "fundamap";
     Button logout;
     TextView nombres, correo;
+    String nombresUsu, correoUsu;
     FirebaseAuth auth;
 
     @Override
@@ -33,24 +34,27 @@ public class Home extends AppCompatActivity {
         nombres = findViewById(R.id.tv_nombreUsu);
         correo = findViewById(R.id.tv_emailUsu);
         auth = FirebaseAuth.getInstance();
-        if(correo.getText().equals("MiguelAngel")){
-            correo.setText(EXTRA_CORREO);
+        correoUsu = getIntent().getStringExtra(EXTRA_CORREO);
+        nombresUsu = getIntent().getStringExtra(EXTRA_NOMBRES);
+        if(correoUsu == null){
+            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+            if (account != null){
+                String nombre = account.getDisplayName();
+                String email = account.getEmail();
+                nombres.setText(nombre);
+                correo.setText(email);
+            }
+        } else {
+            nombres.setText(nombresUsu);
+            correo.setText(correoUsu);
         }
-
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null){
-            String nombre = account.getDisplayName();
-            String email = account.getEmail();
-
-            nombres.setText(nombre);
-            correo.setText(email);
-        }
-
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 auth.signOut();
+                nombres.setText("");
+                correo.setText("");
                 startActivity(new Intent(Home.this, MainActivity.class));
                 finish();
             }

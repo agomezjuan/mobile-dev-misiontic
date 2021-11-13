@@ -120,23 +120,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_logear">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nuevo Usuario?..."
-            android:textColor="@color/azul_purpura"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Diferente correo?___"
+                android:textColor="@color/azul_purpura"/>
 
-        <TextView
-            android:id="@+id/btn_registro_log"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="5dp"
-            android:text="Registrarse"
-            android:textAlignment="textStart"
-            android:textAllCaps="false"
-            android:textColor="@color/azul_oscuro"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/btn_registro_log"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="5dp"
+                android:text="Regístrate"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
+                android:textColor="@color/azul_oscuro"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="___ o escoge abajo..."
+                android:layout_marginStart="5dp"
+                android:textColor="@color/azul_purpura"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -165,13 +177,13 @@
         app:layout_constraintTop_toBottomOf="@+id/v_redes">
 
     <ImageView
-        android:id="@+id/btn_facebook_reg"
+        android:id="@+id/btn_facebook_log"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/fb" />
 
     <ImageView
-        android:id="@+id/btn_google_reg"
+        android:id="@+id/btn_google_log"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="10dp"
