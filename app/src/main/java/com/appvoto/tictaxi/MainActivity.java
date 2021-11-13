@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     //String dirApp = SharedPreferencesUtils.getvariable(MainActivity.this, "dirApp");
                     SharedPreferencesUtils.setvariable(MainActivity.this, "IMEIsys", IMEIsys);
                     SharedPreferencesUtils.setvariable(MainActivity.this, "anIDsys", anIDsys);
-                    startActivity(new Intent(MainActivity.this,Home.class));
+                    startActivity(new Intent(MainActivity.this, Login.class));
                 }
             }
         }, SPLASH_DISPLAY_LENGTH);

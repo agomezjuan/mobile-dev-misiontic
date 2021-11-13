@@ -10,7 +10,7 @@
         android:id="@+id/imageView3"
         android:layout_width="342dp"
         android:layout_height="90dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="56dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,13 +36,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="5dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lbl_registroin"
-        app:layout_constraintVertical_bias="0.153">
+        app:layout_constraintTop_toBottomOf="@+id/lbl_registroin">
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -62,20 +62,16 @@
                 android:layout_height="match_parent" />
 
         </com.google.android.material.textfield.TextInputLayout>
-        <LinearLayout
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_celular_reg"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ti_celular_reg"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="185dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:hint="Número celular."
-                app:boxBackgroundMode="outline"
-                app:startIconDrawable="@drawable/ic_celular">
+            android:layout_marginTop="6dp"
+            android:hint="Número celular."
+            app:boxBackgroundMode="outline"
+            app:startIconDrawable="@drawable/ic_celular">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_celular_registro"
@@ -83,28 +79,8 @@
                 android:layout_height="match_parent"
                 android:inputType="phone" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ti_panico_reg"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="185dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:layout_marginStart="8dp"
-                android:hint="Celular Pánico."
-                app:startIconDrawable="@drawable/ic_celular_rojo"
-                app:boxBackgroundMode="outline">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_panico_registro"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="phone"
-                    android:textColor="@color/rojoscuro"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ti_correo_reg"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -125,70 +101,24 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ti_direccion_reg"
+            android:id="@+id/ti_passw_reg"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:hint="Dirección de Residencia."
+            android:hint="Contraseña."
             app:boxBackgroundMode="outline"
-            app:endIconMode="clear_text"
-            app:startIconDrawable="@drawable/ic_direccion">
+            app:endIconMode="password_toggle"
+            app:startIconDrawable="@drawable/ic_pass">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_direccion_registro"
+                android:id="@+id/et_passw_registro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:maxLines="1"
-                android:inputType="text"/>
+                android:inputType="textPassword"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ti_empresa_reg"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="235dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:hint="Nombre Empresa."
-                android:visibility="visible"
-                app:boxBackgroundMode="outline"
-                app:endIconMode="clear_text">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_empresa_registro"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:lines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ti_placa_reg"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="135dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="6dp"
-                android:hint="Placa Vehículo."
-                android:visibility="visible"
-                app:boxBackgroundMode="outline"
-                app:endIconMode="clear_text"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_placa_registro"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:lines="1"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
 
     </LinearLayout>
 
@@ -205,21 +135,34 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:layout_constraintVertical_bias="0.164" />
 
-    <TextView
-        android:layout_width="374dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="16dp"
-        android:text="El celular de PÁNICO, te servirá en caso de emergencia, enviando tus datos y coordenadas de localización."
-        android:textAlignment="center"
-        android:textColor="@color/rojoscuro"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_registrar"
-        app:layout_constraintVertical_bias="0.215" />
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ya eres Usuario?..."
+            android:textColor="@color/azul_purpura"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/btn_login_reg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:textAllCaps="false"
+            android:textColor="@color/azul_oscuro"
+            android:textStyle="bold"
+            android:textAlignment="textStart"
+            android:paddingStart="5dp"/>
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
