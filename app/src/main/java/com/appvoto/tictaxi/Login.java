@@ -1,5 +1,7 @@
 package com.appvoto.tictaxi;
 
+import static com.appvoto.tictaxi.Home.EXTRA_CORREO;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -74,7 +76,7 @@ public class Login extends AppCompatActivity{
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
                                 dialogo.dismiss();
-                                startActivity(new Intent(Login.this, Home.class));
+                                startActivity(new Intent(Login.this, Home.class).putExtra(EXTRA_CORREO, usercorreo));
                                 finish();
                             } else {
                                 dialogo.dismiss();

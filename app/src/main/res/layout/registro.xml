@@ -10,7 +10,7 @@
         android:id="@+id/imageView3"
         android:layout_width="342dp"
         android:layout_height="90dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -115,7 +115,7 @@
                 android:id="@+id/et_passw_registro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -136,33 +136,75 @@
         app:layout_constraintVertical_bias="0.164" />
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_registrar"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:gravity="center">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_registrar">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ya eres Usuario?..."
-            android:textColor="@color/azul_purpura"
-            android:textStyle="bold"/>
+            android:textColor="@color/azul_purpura" />
 
         <TextView
             android:id="@+id/btn_login_reg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="5dp"
             android:text="Login"
+            android:textAlignment="textStart"
             android:textAllCaps="false"
             android:textColor="@color/azul_oscuro"
-            android:textStyle="bold"
-            android:textAlignment="textStart"
-            android:paddingStart="5dp"/>
+            android:textStyle="bold" />
 
     </LinearLayout>
+
+    <View
+        android:id="@+id/v_redes"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        android:background="@color/azul_oscuro"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="16dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/v_redes">
+
+        <ImageView
+            android:id="@+id/btn_facebook_reg"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/fb" />
+
+        <ImageView
+            android:id="@+id/btn_google_reg"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/googleg_standard_color_18" />
+
+    </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
