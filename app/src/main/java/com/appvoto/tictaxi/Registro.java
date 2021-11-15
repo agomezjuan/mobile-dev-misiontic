@@ -15,6 +15,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -33,6 +34,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Objects;
@@ -43,73 +45,37 @@ import java.util.Objects;
 
 public class Registro extends AppCompatActivity {
 
-    TextInputEditText nombre, celular, correo, passw;
+    TextInputEditText repassw, correo, passw;
     TextView login_reg;
     Button registro;
-    FirebaseAuth auth;
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+    private FirebaseAuth mAuth;
+    FirebaseUser mUser;
     ProgressDialog dialogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registro);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        nombre = findViewById(R.id.et_nombres_registro);
-        celular = findViewById(R.id.et_celular_registro);
-        correo = findViewById(R.id.et_correo_registro);
-        passw = findViewById(R.id.et_passw_registro);
+        correo = findViewById(R.id.et_correo_login); //
+        passw = findViewById(R.id.et_passw_reg); //
+        repassw = findViewById(R.id.et_passwrepeat_reg); //
+
         registro = findViewById(R.id.btn_registrar);
-        login_reg = findViewById(R.id.btn_login_reg);
+        login_reg = findViewById(R.id.btn_registro_log);
 
 
-        auth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
         dialogo = new ProgressDialog(this);
-        dialogo.setMessage("Registrando nuevo Usuario");
-        dialogo.setCanceledOnTouchOutside(false);
 
         //region Boton de registro...
         registro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String usernombre, usercelular, userpassw, usercorreo;
-
-                usernombre = Objects.requireNonNull(nombre.getText()).toString();
-                usercelular = Objects.requireNonNull(celular.getText()).toString();
-                userpassw = Objects.requireNonNull(passw.getText()).toString();
-                usercorreo = Objects.requireNonNull(correo.getText()).toString();
-
-                if(usernombre.isEmpty()){
-                    nombre.setError("No se admite este campo vacío");
-                    nombre.requestFocus();
-                } else if(usercelular.isEmpty()){
-                    celular.setError("No se admite este campo vacío");
-                    celular.requestFocus();
-                } else if(userpassw.isEmpty()){
-                    passw.setError("No se admite este campo vacío");
-                    passw.requestFocus();
-                }else if(usercorreo.isEmpty()){
-                    correo.setError("No se admite este campo vacío");
-                    correo.requestFocus();
-                } else {
-                    dialogo.show();
-                    auth.createUserWithEmailAndPassword(usercorreo, userpassw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                SharedPreferencesUtils.setvariable(Registro.this, "NombreUs", usernombre);
-                                SharedPreferencesUtils.setvariable(Registro.this, "CelularUs", usercelular);
-                                SharedPreferencesUtils.setvariable(Registro.this, "CorreoUs", usercorreo);
-                                SharedPreferencesUtils.setvariable(Registro.this, "PasswUs", userpassw);
-                                dialogo.dismiss();
-                                startActivity(new Intent(Registro.this, Home.class).putExtra(EXTRA_NOMBRES, usernombre).putExtra(EXTRA_CORREO, usercorreo));
-                                finish();
-                            } else {
-                                dialogo.dismiss();
-                                Toast.makeText(Registro.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }
+                registrarAuth();
             }
         });
 
@@ -122,5 +88,46 @@ public class Registro extends AppCompatActivity {
         });
         //endregion
 
+    }
+    private void registrarAuth(){
+
+        String userpassw = Objects.requireNonNull(passw.getText()).toString();
+        String usercorreo = Objects.requireNonNull(correo.getText()).toString();
+        String userpasswrepeat = Objects.requireNonNull(repassw.getText()).toString();
+
+        if (!usercorreo.matches(emailPattern)){
+            correo.setError("Entre un correo Correcto");
+            correo.requestFocus();
+        } else if (userpassw.isEmpty() || userpassw.length()<6){
+            passw.setError("Entre una contraseña correcta");
+            passw.requestFocus();
+        } else if (!userpassw.equals(userpasswrepeat)){
+            repassw.setError("Las contraseñas no son iguales");
+            repassw.requestFocus();
+        } else {
+            dialogo.setMessage("Registrando nuevo Usuario...");
+            dialogo.setTitle("Registrando");
+            dialogo.setCanceledOnTouchOutside(false);
+            dialogo.show();
+            mAuth.createUserWithEmailAndPassword(usercorreo, userpassw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()){
+                        dialogo.dismiss();
+                        proximaActivity();
+                        Toast.makeText(Registro.this, "Registro Exitoso.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        dialogo.dismiss();
+                        Toast.makeText(Registro.this, ""+task.getException(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
+    private void proximaActivity() {
+        Intent intent = new Intent(Registro.this, Home.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

@@ -37,13 +37,8 @@ public class Home extends AppCompatActivity {
         correoUsu = getIntent().getStringExtra(EXTRA_CORREO);
         nombresUsu = getIntent().getStringExtra(EXTRA_NOMBRES);
         if(correoUsu == null){
-            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-            if (account != null){
-                String nombre = account.getDisplayName();
-                String email = account.getEmail();
-                nombres.setText(nombre);
-                correo.setText(email);
-            }
+            nombres.setText("Usuario no registrado Miguelito");
+            correo.setText("Sin correo Miguelito");
         } else {
             nombres.setText(nombresUsu);
             correo.setText(correoUsu);

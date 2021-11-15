@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="amarillo_pastel">#FFECB3</color>
     <color name="naranja_pastel">#FFC107</color>
     <color name="naranja">#FFA000</color>
@@ -19,4 +19,5 @@
     <color name="rojo">#ff0000</color>
     <color name="vinotinto">#960500</color>
     <color name="rojoscuro">#DF3902</color>
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#fff</color>
 </resources>

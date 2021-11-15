@@ -24,10 +24,16 @@
         android:theme="@style/Theme.TicTaxi"
         tools:ignore="AllowBackup">
         <activity
-            android:name=".Reset"
+            android:name=".GithubAuthActivity"
             android:exported="false" />
         <activity
-            android:name=".RegistroCD"
+            android:name=".FacebookAuthActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GoogleSignInActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Reset"
             android:exported="false" />
         <activity
             android:name=".Registro"
@@ -52,8 +58,9 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
-
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
