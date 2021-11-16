@@ -4,12 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home"
-    android:background="@drawable/bg">
-
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:background="@drawable/bg"
+    tools:context=".Home">
 
     <View
         android:id="@+id/viewhome"
@@ -21,61 +17,74 @@
         android:id="@+id/imageView2"
         android:layout_width="342dp"
         android:layout_height="90dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="104dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.159"
         app:srcCompat="@drawable/tictaxi_onblack_1280" />
 
     <Button
         android:id="@+id/btn_logout"
-        android:layout_width="wrap_content"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
+        android:layout_marginTop="104dp"
         android:text="Salir"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/white"
+        app:strokeColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.161" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="wrap_content"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:onClick="irRegistro"
         android:text="Historial"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/white"
+        app:strokeColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_logout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.398"
         app:layout_constraintStart_toEndOf="@+id/btn_logout"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:layout_constraintVertical_bias="0.161" />
+        app:layout_constraintTop_toTopOf="@+id/btn_logout"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/tv_nombreUsu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="5dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="16dp"
+        android:padding="8dp"
         android:text="Nombres completos."
+        android:textColor="@color/white"
+        android:background="@drawable/tex_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_logout" />
 
     <TextView
         android:id="@+id/tv_emailUsu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="16dp"
+        android:padding="8dp"
+        android:text="Correo."
+        android:textColor="@color/white"
+        android:background="@drawable/tex_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="Correo."
         app:layout_constraintTop_toBottomOf="@+id/tv_nombreUsu" />
 
-</ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

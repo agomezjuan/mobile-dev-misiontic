@@ -54,16 +54,13 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ti_correo_log"
-            style="@style/LoginTextInputLayoutStyle"
+            style="@style/outlinedTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:hint="Email."
-            android:textColorHint="#fff"
-            android:theme="@style/LoginTextInputLayoutStyle"
-            app:boxBackgroundMode="outline"
-            app:boxStrokeColor="#fff"
             app:endIconMode="clear_text"
+            app:endIconTint="@color/white"
             app:startIconDrawable="@drawable/ic_correo"
             app:startIconTint="@color/white">
 
@@ -78,14 +75,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ti_passw_log"
-            style="@style/LoginTextInputLayoutStyle"
+            style="@style/outlinedTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:hint="Contraseña."
-            android:textColorHint="#fff"
-            android:theme="@style/LoginTextInputLayoutStyle"
-            app:boxStrokeColor="#fff"
             app:endIconMode="password_toggle"
             app:endIconTint="@color/white"
             app:startIconDrawable="@drawable/ic_pass"
@@ -95,7 +89,8 @@
                 android:id="@+id/et_passw_reg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textColor="@color/white"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -4,31 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/bg">
 
     <ProgressBar
         android:id="@+id/splashLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:indeterminateTint="@color/colorPrimaryDark"
+        android:indeterminateTint="@color/white"
+        android:progressBackgroundTint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.648"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.193"
         tools:ignore="UnusedAttribute" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="227dp"
         android:layout_height="236dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="112dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.309"
-        app:srcCompat="@drawable/tictaxi_cdo" />
+        app:srcCompat="@drawable/tictaxi_onblack_cdo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

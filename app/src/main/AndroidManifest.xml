@@ -24,6 +24,9 @@
         android:theme="@style/Theme.TicTaxi"
         tools:ignore="AllowBackup">
         <activity
+            android:name=".PhoneSMSActivity"
+            android:exported="false" />
+        <activity
             android:name=".TwitterAuthActivity"
             android:exported="false" />
         <activity
