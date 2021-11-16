@@ -33,6 +33,7 @@ public class GithubAuthActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_github_auth);
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         correo = findViewById(R.id.et_correo_git);
@@ -64,11 +65,7 @@ public class GithubAuthActivity extends AppCompatActivity {
                                         new OnSuccessListener<AuthResult>() {
                                             @Override
                                             public void onSuccess(AuthResult authResult) {
-                                                // User is signed in.
-                                                // IdP data available in
-                                                // authResult.getAdditionalUserInfo().getProfile().
-                                                // The OAuth access token can also be retrieved:
-                                                // authResult.getCredential().getAccessToken().
+                                                openNextActividad();
                                             }
                                         })
                                 .addOnFailureListener(

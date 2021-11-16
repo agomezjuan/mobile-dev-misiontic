@@ -31,7 +31,7 @@ import java.util.Objects;
 public class Login extends AppCompatActivity{
     TextInputEditText correo, passw;
     TextView olvido, registrar;
-    ImageView btn_google, btn_facebook, btn_github;
+    ImageView btn_google, btn_facebook, btn_github, btn_phone, btn_twitter;
     Button ingresar;
     FirebaseAuth auth;
     ProgressDialog dialogo;
@@ -50,6 +50,8 @@ public class Login extends AppCompatActivity{
         btn_google = findViewById(R.id.btn_google_logo);
         btn_facebook = findViewById(R.id.btn_facebook_logo);
         btn_github = findViewById(R.id.btn_github_log);
+        btn_phone = findViewById(R.id.btn_phone_log);
+        btn_twitter = findViewById(R.id.btn_twitter_log);
 
         auth = FirebaseAuth.getInstance();
         dialogo = new ProgressDialog(this);
@@ -132,6 +134,22 @@ public class Login extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Login.this, GithubAuthActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+            }
+        });
+
+        btn_phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Login.this, PhoneAuthActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+            }
+        });
+
+        btn_twitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Login.this, TwitterAuthActivity.class)
                         .setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
             }
         });

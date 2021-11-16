@@ -12,6 +12,8 @@
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.2828125" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_phone_auth.xml" value="0.2784615384615385" />
+        <entry key="app/src/main/res/layout/activity_twitter_auth.xml" value="0.2784615384615385" />
         <entry key="app/src/main/res/layout/login.xml" value="0.2828125" />
         <entry key="app/src/main/res/layout/los_permisos.xml" value="0.2708333333333333" />
         <entry key="app/src/main/res/layout/registro.xml" value="0.2828125" />

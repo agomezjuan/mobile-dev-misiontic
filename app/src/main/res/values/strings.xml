@@ -2,5 +2,7 @@
     <string name="app_name">TicTaxi</string>
     <string name="facebook_app_id">1501509830228243</string>
     <string name="fb_login_protocol_scheme">fb1501509830228243</string>
+    <string name="d_web_client_id" translatable="false">654371226709-0si9s8o89f7cr16a4snjndsggm8u29l3.apps.googleusercontent.com</string>
+
 
 </resources>

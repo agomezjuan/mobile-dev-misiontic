@@ -4,25 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home">
+    tools:context=".Home"
+    android:background="@drawable/bg">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/viewhome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#4B000000" />
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="263dp"
-        android:layout_height="224dp"
+        android:layout_width="342dp"
+        android:layout_height="90dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.307"
-        app:srcCompat="@drawable/tictaxi_cdo" />
+        app:layout_constraintVertical_bias="0.159"
+        app:srcCompat="@drawable/tictaxi_onblack_1280" />
 
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
-        android:text="Logout"
+        android:text="Salir"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
@@ -65,5 +77,5 @@
         android:text="Correo."
         app:layout_constraintTop_toBottomOf="@+id/tv_nombreUsu" />
 
-
+</ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
