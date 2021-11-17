@@ -21,7 +21,7 @@ import java.util.Objects;
 public class Reset extends AppCompatActivity {
 
     TextInputEditText correo;
-    TextView registro_rest;
+    TextView registro_rest, salir;
     Button restablecer;
     FirebaseAuth auth;
     ProgressDialog dialogo;
@@ -34,6 +34,7 @@ public class Reset extends AppCompatActivity {
         correo = findViewById(R.id.et_correo_rest);
         restablecer = findViewById(R.id.btn_restaurar);
         registro_rest = findViewById(R.id.btn_registro_rest);
+        salir = findViewById(R.id.salir_restablecer);
 
         auth = FirebaseAuth.getInstance();
         dialogo = new ProgressDialog(this);
@@ -71,6 +72,13 @@ public class Reset extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Reset.this, Registro.class));
+                finish();
+            }
+        });
+        salir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Reset.this, Login.class));
                 finish();
             }
         });

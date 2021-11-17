@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Reset">
+    tools:context=".Reset"
+    android:background="@drawable/bg">
 
 
     <ImageView
@@ -16,7 +17,7 @@
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/tictaxi_rect" />
+        app:srcCompat="@drawable/tictaxi_onblack_1280" />
 
     <TextView
         android:id="@+id/lbl_reset"
@@ -25,7 +26,7 @@
         android:layout_marginTop="32dp"
         android:text="Restablecer contraseña"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,40 +48,46 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ti_correo_rest"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/outlinedTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:hint="Email."
             app:boxBackgroundMode="outline"
             app:endIconMode="clear_text"
-            app:startIconDrawable="@drawable/ic_correo">
+            app:endIconTint="@color/white"
+            app:startIconDrawable="@drawable/ic_correo"
+            app:startIconTint="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_correo_rest"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:textColor="@color/white"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ti_passw_rest"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/outlinedTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:hint="Contraseña."
             app:boxBackgroundMode="outline"
             app:endIconMode="password_toggle"
+            app:endIconTint="@color/white"
             app:startIconDrawable="@drawable/ic_pass"
+            app:startIconTint="@color/white"
             android:enabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_passw_rest"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword"
+                android:textColor="@color/white"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,30 +97,40 @@
 
     <Button
         android:id="@+id/btn_restaurar"
-        android:layout_width="wrap_content"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Restaurar"
-        android:textColor="@color/black2"
+        android:textColor="@color/white"
+        android:layout_margin="16dp"
+        app:cornerRadius="7dp"
+        app:strokeColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:layout_constraintVertical_bias="0.119" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_restaurar"
         android:orientation="horizontal"
+        android:layout_margin="16dp"
         android:gravity="center">
+
+        <TextView
+            android:id="@+id/salir_restablecer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Salir  "
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mejor ?..."
-            android:textColor="@color/azul_purpura"
+            android:text="o mejor ?...  "
+            android:textColor="@color/white"
             android:textStyle="bold"/>
 
         <TextView
@@ -121,11 +138,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Registrarse"
-            android:textAllCaps="false"
-            android:textColor="@color/azul_oscuro"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
             android:textStyle="bold"
-            android:textAlignment="textStart"
-            android:paddingStart="5dp"/>
+            android:textAlignment="textStart"/>
 
     </LinearLayout>
 

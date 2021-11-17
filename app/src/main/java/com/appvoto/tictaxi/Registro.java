@@ -121,7 +121,7 @@ public class Registro extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
                         dialogo.dismiss();
-                        proximaActivity();
+                        startActivity(new Intent(Registro.this, Login.class));
                         Toast.makeText(Registro.this, "Registro Exitoso.", Toast.LENGTH_SHORT).show();
                     } else {
                         dialogo.dismiss();
@@ -130,12 +130,5 @@ public class Registro extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    private void proximaActivity() {
-        Intent intent = new Intent(Registro.this, Home.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(EXTRA_NOMBRES, usernombre).putExtra(EXTRA_CORREO, usercorreo);
-        startActivity(intent);
     }
 }
