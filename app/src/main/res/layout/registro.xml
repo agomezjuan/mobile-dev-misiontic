@@ -89,7 +89,8 @@
                 android:id="@+id/et_celular_registro"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="phone" />
+                android:inputType="phone"
+                android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,7 +132,8 @@
                 android:id="@+id/et_passw_reg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textColor="@color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -151,7 +153,8 @@
                 android:id="@+id/et_passwrepeat_reg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textColor="@color/white"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

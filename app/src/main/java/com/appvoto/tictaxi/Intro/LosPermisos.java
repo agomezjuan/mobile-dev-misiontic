@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,11 +49,13 @@ public class LosPermisos extends AppCompatActivity {
 
     public static final String EXTRA_CLUF = "datoCLUF";
     public static final String EXTRA_FCHPERM = "datoFECHA";
-    private Button acepta;
-    private TextView mensajePermisos, titulopermisos;
-    private File dirOut, dirApp, dirIn, dirZip;
-    private String dirBase, clufbase, IMEIsys, anIDsys;
-    private CheckBox avis;
+    Button acepta;
+    TextView mensajePermisos, titulopermisos;
+    File dirOut, dirApp, dirIn, dirZip;
+    String dirBase, clufbase, IMEIsys, anIDsys;
+    Boolean verCluf = false, verAviso = false;
+    CheckBox avis;
+    RadioButton verCompleto;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -65,6 +68,9 @@ public class LosPermisos extends AppCompatActivity {
         mensajePermisos = findViewById(R.id.txt_perm_ini);
         titulopermisos = findViewById(R.id.txt_perm_iniTit);
         avis = findViewById(R.id.chbx_aceptcluf);
+        verCompleto = findViewById(R.id.rb_vercompleto);
+        verCompleto.setVisibility(View.GONE);
+        verCompleto.setChecked(false);
 
         //region OK... Cambios en las pantallas...
         final String elcluf = getIntent().getStringExtra(EXTRA_CLUF);
@@ -78,7 +84,7 @@ public class LosPermisos extends AppCompatActivity {
             case "base":
                 acepta.setText("Autorizar");
                 titulopermisos.setText("Autorizaciones");
-                mensajePermisos.setText("Debes Autorizarme los siguientes permisos para funcionar correctamente:\nTeléfono: Para emergencias.\nArchivos: Para crear tu Base de Datos.\nDale clic en Autorizar.");
+                mensajePermisos.setText(Html.fromHtml("<p>Debes Autorizarme los siguientes permisos para funcionar correctamente.</p><p><ul>Autorizaciones:<li><b>1.-  Teléfono:</b> Para emergencias.</li><li><b>2.-  Archivos:</b> Para crear tu Base de Datos.</li><li><b>3.-  Internet:</b> Para conectarnos con el Login.</li><li><b>4.-  GPS:</b> Para trazar las rutas.</li></ul></p><br><p>Dale clic en Autorizar.</p>"));
                 break;
             case "CLUF":
                 acepta.setText("Contenido del CLUF");
@@ -100,13 +106,15 @@ public class LosPermisos extends AppCompatActivity {
             public void onClick(View view) {
                 switch (acepta.getText().toString()) {
                     case "Autorizar":
+                        //region Aranque
                         arrancada();
                         acepta.setText("Crea Directorios");
                         titulopermisos.setText("Directorios de TicTaxi");
-                        mensajePermisos.setText("Se va a crear la siguiente Carpeta en tu directorio DCIM/AppTicTaxi_bck...\nPara enviarte allí, todos tus archivos comprimidos.\nMBueno admin.");
+                        mensajePermisos.setText(Html.fromHtml("Se va a crear la siguiente Carpeta en tu directorio <br><br><ul><li><b>1.-  DCIM/AppTicTaxi_bck...</b></li></ul>Para enviarte allí, todos tus archivos comprimidos.<br><br><b>MBueno admin.</b><br>"));
                         break;
+                        //endregion
                     case "Crea Directorios":
-                        // Directorio para exportar la base de datos...
+                        // region Directorio para exportar la base de datos...
                         dirOut = new File(String.format("%s%s%s%s", Environment.getExternalStorageDirectory(), "/",
                                 Environment.DIRECTORY_DCIM, bckAppTicTaxi));
                         if (!dirOut.exists()) {
@@ -139,12 +147,20 @@ public class LosPermisos extends AppCompatActivity {
                                 dirApp.mkdirs();
                             }
                         }
+                        //endregion
+
+                        //region Despliegue del CLUF...
                         acepta.setText("Aceptar el CLUF");
-                        recuperarContrato("CLUF");
+                        verCompleto.setVisibility(View.VISIBLE);
+                        verCluf = true;
+                        verAviso = false;
+                        mensajePermisos.setText(Html.fromHtml("Leer el contrato de Usuario Final, es muy <b>importante</b> lo mismo que usted lo <b>apruebe</b>.<br><br>Todo ello conforme a las normas internacionales.<br><br>La opción ver completo te permitirá ver el CLUF en su totalidad.<br>"));
                         avis.setVisibility(View.VISIBLE);
                         avis.setText("Acepto los términos del contrato");
                         titulopermisos.setText("CONTRATO DE LICENCIA DE USUARIO FINAL");
+                        //endregion
 
+                        //region Setea y carga los sharedpreferencia iniciales...
                         anIDsys = Settings.Secure.getString(LosPermisos.this.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
                         IMEIsys = Device.idUUID(LosPermisos.this);
                         String fechaInstala = getIntent().getStringExtra(EXTRA_FCHPERM);
@@ -155,19 +171,27 @@ public class LosPermisos extends AppCompatActivity {
                         SharedPreferencesUtils.setvariable(LosPermisos.this, "dirApp", String.valueOf(dirApp));
                         SharedPreferencesUtils.setvariable(LosPermisos.this, "fchIn", fechaInstala);
                         break;
+                        //endregion
                     case "Aceptar el CLUF":
+                        //region Mensaje de entrada para leer el aviso de
                         if (avis.isChecked()) {
                             titulopermisos.setText("LEY DATAS PERSONAL");
-                            mensajePermisos.setText("Es bueno leer mas sobre la Ley de protección de los datos personales, Ley 1581 de 2002. Usted será ahora responsable de los datos que aquí cree.\nCondideramos que usted entiende los alcances de la ley");
+                            mensajePermisos.setText(Html.fromHtml("<p>Es bueno leer más sobre la Ley de protección de los datos personales, <b>Ley 1581 de 2002</b>.</p> <p>Usted será ahora, <b>responsable</b> de los datos que aquí se creen.</p><p>Condideramos que usted entiende los alcances de la ley</p><br>"));
                             acepta.setText("Leer Aviso Privacidad");
+                            verCompleto.setVisibility(View.GONE);
+                            verCluf = false;
                             avis.setVisibility(View.INVISIBLE);
                             avis.setChecked(false);
                         } else {
                             Toast.makeText(LosPermisos.this, "Por favor acepta los términos del contrato o cancela la instalación", Toast.LENGTH_LONG).show();
                         }
+                        //endregion
                         break;
                     case "Leer Aviso Privacidad":
-                        recuperarContrato("AVIS");
+                        //region Despliegue del Aviso de Privacidad...
+                        mensajePermisos.setText(Html.fromHtml("<p>Leer el <b>Aviso de Privacidad (Ley 1581 de 2002)</b>, es muy importante, lo mismo que usted lo <b>apruebe</b>.</p><p>Todo ello conforme a las normas internacionales.</p><p>La opción ver completo te permitirá ver el Aviso de Privacidad en su totalidad.</p><br>"));
+                        verAviso = true;
+                        verCompleto.setVisibility(View.VISIBLE);
                         avis.setVisibility(View.VISIBLE);
                         avis.setText("Estoy entendido del Aviso de Privacidad");
                         avis.setChecked(false);
@@ -176,13 +200,16 @@ public class LosPermisos extends AppCompatActivity {
                         acepta.setSelected(true);
                         SharedPreferencesUtils.setvariable(LosPermisos.this, "CLUF", "OK");
                         break;
+                        //endregion
                     case "Aceptar el Data":
                         if (avis.isChecked()) {
                             acepta.setText("Registrar");
                             titulopermisos.setText("INSCRIPCIÓN");
                             avis.setVisibility(View.INVISIBLE);
+                            verCompleto.setVisibility(View.GONE);
+                            verAviso = false;
                             SharedPreferencesUtils.setvariable(LosPermisos.this, "AVIS", "OK");
-                            mensajePermisos.setText("Opciones de Registro en TicTaxi© \n\n\t1.- Registro como Pasajero\n\n\t2.- Registro como Conductor.\n\n\nLas opciones suelen ser las mismas, lo que las difiere es que en Conductor, tú inscribes el vehículo de transporte.");
+                            mensajePermisos.setText(Html.fromHtml("<p>Opciones de Registro en TicTaxi©</p><ul><li>1.- Registro como <b>Pasajero</b></li><li>2.- Registro como <b>Conductor</b>.</li></ul><br>Las opciones suelen ser las mismas, lo que las difiere es que en Conductor, tú inscribes el vehículo de transporte.<br>"));
                         } else {
                             Toast.makeText(LosPermisos.this, "Por favor acepta el Aviso de Privacidad o cancela la instalación", Toast.LENGTH_LONG).show();
                         }
@@ -202,6 +229,24 @@ public class LosPermisos extends AppCompatActivity {
             }
         });
         //endregion
+
+        verCompleto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (verCompleto.isChecked()){
+                    if (verCluf) {
+                        recuperarContrato("CLUF");
+                        verCompleto.setVisibility(View.GONE);
+                        verCompleto.setChecked(false);
+                    }
+                    if (verAviso){
+                        recuperarContrato("AVIS");
+                        verCompleto.setVisibility(View.GONE);
+                        verCompleto.setChecked(false);
+                    }
+                }
+            }
+        });
     }
 
     //region Ok... SETEAR LOS PERMISOS QUE NECESITA LA TicTaxi

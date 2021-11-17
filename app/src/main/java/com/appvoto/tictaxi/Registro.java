@@ -45,10 +45,11 @@ import java.util.Objects;
 
 public class Registro extends AppCompatActivity {
 
-    TextInputEditText repassw, correo, passw;
+    TextInputEditText repassw, correo, passw, nombres, celular;
     TextView login_reg;
     Button registro;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+    String usercorreo, usernombre, userpassw, usercelular, userpasswrepeat;
     private FirebaseAuth mAuth;
     FirebaseUser mUser;
     ProgressDialog dialogo;
@@ -62,6 +63,8 @@ public class Registro extends AppCompatActivity {
         correo = findViewById(R.id.et_correo_login); //
         passw = findViewById(R.id.et_passw_reg); //
         repassw = findViewById(R.id.et_passwrepeat_reg); //
+        nombres = findViewById(R.id.et_nombres_registro);
+        celular = findViewById(R.id.et_celular_registro);
 
         registro = findViewById(R.id.btn_registrar);
         login_reg = findViewById(R.id.btn_registro_log);
@@ -91,9 +94,13 @@ public class Registro extends AppCompatActivity {
     }
     private void registrarAuth(){
 
-        String userpassw = Objects.requireNonNull(passw.getText()).toString();
-        String usercorreo = Objects.requireNonNull(correo.getText()).toString();
-        String userpasswrepeat = Objects.requireNonNull(repassw.getText()).toString();
+        userpassw = Objects.requireNonNull(passw.getText()).toString();
+        usernombre = Objects.requireNonNull(nombres.getText()).toString();
+        usercelular = Objects.requireNonNull(celular.getText()).toString();
+        SharedPreferencesUtils.setvariable(Registro.this,"nombreUser", usernombre);
+        SharedPreferencesUtils.setvariable(Registro.this, "celularUser",usercelular);
+        usercorreo = Objects.requireNonNull(correo.getText()).toString();
+        userpasswrepeat = Objects.requireNonNull(repassw.getText()).toString();
 
         if (!usercorreo.matches(emailPattern)){
             correo.setError("Entre un correo Correcto");
@@ -128,6 +135,7 @@ public class Registro extends AppCompatActivity {
     private void proximaActivity() {
         Intent intent = new Intent(Registro.this, Home.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(EXTRA_NOMBRES, usernombre).putExtra(EXTRA_CORREO, usercorreo);
         startActivity(intent);
     }
 }

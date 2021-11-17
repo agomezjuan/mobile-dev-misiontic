@@ -79,7 +79,7 @@ public class Login extends AppCompatActivity{
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
                                 dialogo.dismiss();
-                                String usernombres = SharedPreferencesUtils.getvariable(Login.this, "NombreUs");
+                                String usernombres = SharedPreferencesUtils.getvariable(Login.this, "nombreUser");
                                 if(usernombres.isEmpty() || usernombres == null){
                                     usernombres = "No tienes nombres Miguelito";
                                 }
