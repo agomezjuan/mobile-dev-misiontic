@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.text.Html;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -58,6 +59,7 @@ public class LosPermisos extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.los_permisos);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         acepta = findViewById(R.id.btn_perm_ini);
         mensajePermisos = findViewById(R.id.txt_perm_ini);
