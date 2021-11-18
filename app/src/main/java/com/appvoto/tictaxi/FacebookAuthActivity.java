@@ -76,6 +76,7 @@ public class FacebookAuthActivity extends Login {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
                             FirebaseUser user = fAuth.getCurrentUser();
                             updateUI(user);
                         } else {

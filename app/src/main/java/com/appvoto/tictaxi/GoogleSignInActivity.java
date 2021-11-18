@@ -51,9 +51,6 @@ public class GoogleSignInActivity extends Login {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         signIn();
-
-
-
     }
 
     @Override
