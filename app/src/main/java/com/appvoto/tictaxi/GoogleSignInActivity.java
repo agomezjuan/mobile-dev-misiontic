@@ -72,7 +72,7 @@ public class GoogleSignInActivity extends Login {
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
                 dialogo.dismiss();
-                Toast.makeText(GoogleSignInActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(GoogleSignInActivity.this, "onActivityResult "+e.getMessage(), Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
@@ -94,7 +94,7 @@ public class GoogleSignInActivity extends Login {
                             updateUI(user);
                         } else {
                             dialogo.dismiss();
-                            Toast.makeText(GoogleSignInActivity.this, ""+task.getException(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GoogleSignInActivity.this, "signInWithCredential "+task.getException(), Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     }

@@ -1,5 +1,7 @@
 package com.appvoto.tictaxi;
 
+import static com.appvoto.tictaxi.Home.EXTRA_CORREO;
+import static com.appvoto.tictaxi.Home.EXTRA_NOMBRES;
 import static com.appvoto.tictaxi.Intro.LosPermisos.EXTRA_FCHPERM;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,12 +42,13 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, LosPermisos.class).putExtra(EXTRA_FCHPERM, FechaHoy));
                     finish();
                 } else {
-                    @SuppressLint("HardwareIds") String anIDsys = Settings.Secure.getString(MainActivity.this.getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-                    String IMEIsys = Device.idUUID(MainActivity.this);
-                    //String dirApp = SharedPreferencesUtils.getvariable(MainActivity.this, "dirApp");
-                    SharedPreferencesUtils.setvariable(MainActivity.this, "IMEIsys", IMEIsys);
-                    SharedPreferencesUtils.setvariable(MainActivity.this, "anIDsys", anIDsys);
-                    startActivity(new Intent(MainActivity.this, Login.class));
+                    String uLogin = SharedPreferencesUtils.getvariable(MainActivity.this, "correo");
+                    String uNombre = SharedPreferencesUtils.getvariable(MainActivity.this, "nombreUser");
+                    if (uLogin.isEmpty()){
+                        startActivity(new Intent(MainActivity.this, Login.class));
+                    } else {
+                        startActivity(new Intent(MainActivity.this, Home.class).putExtra(EXTRA_NOMBRES, uNombre).putExtra(EXTRA_CORREO, uLogin));
+                    }
                 }
             }
         }, SPLASH_DISPLAY_LENGTH);

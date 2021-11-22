@@ -29,7 +29,6 @@ public class TwitterAuthActivity extends Login {
 
         Task<AuthResult> pendingResultTask = firebaseAuth.getPendingAuthResult();
         if (pendingResultTask != null) {
-            // There's something already here! Finish the sign-in for your user.
             pendingResultTask
                     .addOnSuccessListener(
                             new OnSuccessListener<AuthResult>() {
@@ -48,7 +47,7 @@ public class TwitterAuthActivity extends Login {
                             });
         } else {
             firebaseAuth
-                    .startActivityForSignInWithProvider(/* activity= */ this, provider.build())
+                    .startActivityForSignInWithProvider(TwitterAuthActivity.this, provider.build())
                     .addOnSuccessListener(
                             new OnSuccessListener<AuthResult>() {
                                 @Override

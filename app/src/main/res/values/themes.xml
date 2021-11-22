@@ -22,4 +22,9 @@
         <item name="hintTextColor">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
     </style>
+    <style name="outlinedTextInputLayout_panico" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/rojoscuro</item>
+        <item name="hintTextColor">@color/rojoscuro</item>
+        <item name="android:textColorHint">@color/rojoscuro</item>
+    </style>
 </resources>

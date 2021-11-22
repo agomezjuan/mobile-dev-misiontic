@@ -15,13 +15,19 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_phone_auth.xml" value="0.2784615384615385" />
         <entry key="app/src/main/res/layout/activity_twitter_auth.xml" value="0.2784615384615385" />
+        <entry key="app/src/main/res/layout/facebook_auth.xml" value="0.2828125" />
+        <entry key="app/src/main/res/layout/github_auth.xml" value="0.2828125" />
+        <entry key="app/src/main/res/layout/google_sign_in.xml" value="0.2828125" />
+        <entry key="app/src/main/res/layout/home.xml" value="0.2828125" />
         <entry key="app/src/main/res/layout/login.xml" value="0.2828125" />
         <entry key="app/src/main/res/layout/los_permisos.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/mapa_base.xml" value="0.1" />
         <entry key="app/src/main/res/layout/phone_auth.xml" value="0.335" />
         <entry key="app/src/main/res/layout/phone_smsactivity.xml" value="0.2784615384615385" />
         <entry key="app/src/main/res/layout/registro.xml" value="0.2828125" />
         <entry key="app/src/main/res/layout/registro_cd.xml" value="0.26875" />
         <entry key="app/src/main/res/layout/reset.xml" value="0.2828125" />
+        <entry key="app/src/main/res/layout/twitter_auth.xml" value="0.2828125" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3333333333333333" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.18854166666666666" />
       </map>

@@ -24,7 +24,7 @@ public class Reset extends AppCompatActivity {
     TextInputEditText correo;
     TextView registro_rest, salir;
     Button restablecer;
-    FirebaseAuth auth;
+    FirebaseAuth mAuth;
     ProgressDialog dialogo;
 
     @Override
@@ -38,7 +38,7 @@ public class Reset extends AppCompatActivity {
         registro_rest = findViewById(R.id.btn_registro_rest);
         salir = findViewById(R.id.salir_restablecer);
 
-        auth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         dialogo = new ProgressDialog(this);
         dialogo.setMessage("Restaurando su clave...");
         dialogo.setCanceledOnTouchOutside(false);
@@ -50,22 +50,22 @@ public class Reset extends AppCompatActivity {
                 usercorreo = Objects.requireNonNull(correo.getText()).toString();
                 if(!usercorreo.isEmpty()){
                     dialogo.show();
-                    auth.sendPasswordResetEmail(usercorreo).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    mAuth.sendPasswordResetEmail(usercorreo).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
                                 dialogo.dismiss();
-                                Toast.makeText(Reset.this, "Se te ha enviado al correo un enlace para restablecer tu contraseña.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Reset.this, "Se te ha enviado al correo un enlace para restablecer tu contraseña.", Toast.LENGTH_LONG).show();
                                 startActivity(new Intent(Reset.this, Login.class));
                                 finish();
                             } else {
                                 dialogo.dismiss();
-                                Toast.makeText(Reset.this, "No se pudo enviar el correo de restablecimiento de contraseña", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Reset.this, "No se pudo enviar el correo de restablecimiento de contraseña", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
                 } else {
-                    Toast.makeText(Reset.this, "Ingrese un correo válido", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Reset.this, "Ingrese un correo válido", Toast.LENGTH_LONG).show();
                 }
 
             }

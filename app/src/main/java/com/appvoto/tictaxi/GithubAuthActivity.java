@@ -1,5 +1,8 @@
 package com.appvoto.tictaxi;
 
+import static com.appvoto.tictaxi.Home.EXTRA_CORREO;
+import static com.appvoto.tictaxi.Home.EXTRA_NOMBRES;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,7 +36,6 @@ public class GithubAuthActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.github_auth);
-
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         correo = findViewById(R.id.et_correo_git);
@@ -47,7 +49,7 @@ public class GithubAuthActivity extends AppCompatActivity {
                 if (!email.matches(emailPattern)){
                     Toast.makeText(GithubAuthActivity.this, "Ingrese una cuenta real", Toast.LENGTH_SHORT).show();
                 } else {
-                    OAuthProvider.Builder provider = OAuthProvider.newBuilder("gith.com");
+                    OAuthProvider.Builder provider = OAuthProvider.newBuilder("github.com");
                     provider.addCustomParameter("login", email);
                     List<String> scopes =
                             new ArrayList<String>() {
@@ -59,25 +61,23 @@ public class GithubAuthActivity extends AppCompatActivity {
 
                     Task<AuthResult> pendingResultTask = gitAuth.getPendingAuthResult();
                     if (pendingResultTask != null) {
-                        // There's something already here! Finish the sign-in for your user.
                         pendingResultTask
                                 .addOnSuccessListener(
                                         new OnSuccessListener<AuthResult>() {
                                             @Override
                                             public void onSuccess(AuthResult authResult) {
-                                                openNextActividad();
+                                                //
                                             }
                                         })
                                 .addOnFailureListener(
                                         new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(GithubAuthActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(GithubAuthActivity.this, "pendingResultTask "+e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                     } else {
-                        gitAuth
-                                .startActivityForSignInWithProvider(/* activity= */ GithubAuthActivity.this, provider.build())
+                        gitAuth.startActivityForSignInWithProvider(GithubAuthActivity.this, provider.build())
                                 .addOnSuccessListener(
                                         new OnSuccessListener<AuthResult>() {
                                             @Override
@@ -89,7 +89,7 @@ public class GithubAuthActivity extends AppCompatActivity {
                                         new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(GithubAuthActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(GithubAuthActivity.this, "startActivityForSignInWithProvider "+e.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         });
                     }
@@ -102,6 +102,8 @@ public class GithubAuthActivity extends AppCompatActivity {
     private void openNextActividad() {
         Intent intent = new Intent(GithubAuthActivity.this, Home.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(EXTRA_NOMBRES, "Usuario de Twitter");
+        intent.putExtra(EXTRA_CORREO, "Correo de Twitter.");
         startActivity(intent);
         finish();
     }

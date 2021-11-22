@@ -29,14 +29,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.errorprone.annotations.FormatString;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -45,13 +53,14 @@ import java.util.Objects;
 
 public class Registro extends AppCompatActivity {
 
-    TextInputEditText repassw, correo, passw, nombres, celular;
+    TextInputEditText repassw, correo, passw, nombres, celular, panico;
     TextView login_reg;
     Button registro;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-    String usercorreo, usernombre, userpassw, usercelular, userpasswrepeat;
-    private FirebaseAuth mAuth;
+    String uCorreo, uNombre, uPassw, uCelular, uPasswR, uPanico;
+    FirebaseAuth mAuth;
     FirebaseUser mUser;
+    FirebaseFirestore mFirestore;
     ProgressDialog dialogo;
 
     @Override
@@ -60,18 +69,23 @@ public class Registro extends AppCompatActivity {
         setContentView(R.layout.registro);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        correo = findViewById(R.id.et_correo_login); //
-        passw = findViewById(R.id.et_passw_reg); //
-        repassw = findViewById(R.id.et_passwrepeat_reg); //
         nombres = findViewById(R.id.et_nombres_registro);
         celular = findViewById(R.id.et_celular_registro);
+        panico = findViewById(R.id.et_panico_registro);
+        correo = findViewById(R.id.et_correo_reg); //
+        passw = findViewById(R.id.et_passw_reg); //
+        repassw = findViewById(R.id.et_passwrepeat_reg); //
+        /*nombres.setText("Miguel Angel Bueno Perez");
+        celular.setText("3154485686");
+        panico.setText("3142655116");
+        correo.setText("buenoperez.miguelangel@gmail.com");
+        passw.setText("123456789");
+        repassw.setText("123456789");*/
 
         registro = findViewById(R.id.btn_registrar);
         login_reg = findViewById(R.id.btn_registro_log);
 
 
-        mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
         dialogo = new ProgressDialog(this);
 
         //region Boton de registro...
@@ -94,35 +108,72 @@ public class Registro extends AppCompatActivity {
     }
     private void registrarAuth(){
 
-        userpassw = Objects.requireNonNull(passw.getText()).toString();
-        usernombre = Objects.requireNonNull(nombres.getText()).toString();
-        usercelular = Objects.requireNonNull(celular.getText()).toString();
-        SharedPreferencesUtils.setvariable(Registro.this,"nombreUser", usernombre);
-        SharedPreferencesUtils.setvariable(Registro.this, "celularUser",usercelular);
-        usercorreo = Objects.requireNonNull(correo.getText()).toString();
-        userpasswrepeat = Objects.requireNonNull(repassw.getText()).toString();
+        uNombre = Objects.requireNonNull(nombres.getText()).toString();
+        uCelular = Objects.requireNonNull(celular.getText()).toString();
+        uPanico = Objects.requireNonNull(panico.getText()).toString();
+        uPassw = Objects.requireNonNull(passw.getText()).toString();
+        SharedPreferencesUtils.setvariable(Registro.this,"nombreUser", uNombre);
+        SharedPreferencesUtils.setvariable(Registro.this, "celularUser",uCelular);
+        SharedPreferencesUtils.setvariable(Registro.this, "celularPanic",uPanico);
+        SharedPreferencesUtils.setvariable(Registro.this,"correo", uCorreo);
+        uCorreo = Objects.requireNonNull(correo.getText()).toString();
+        uPasswR = Objects.requireNonNull(repassw.getText()).toString();
 
-        if (!usercorreo.matches(emailPattern)){
+        if (uNombre.isEmpty()){
+            nombres.setError("Entre un correo Correcto");
+            nombres.requestFocus();
+        } else if (!uCorreo.matches(emailPattern)){
             correo.setError("Entre un correo Correcto");
             correo.requestFocus();
-        } else if (userpassw.isEmpty() || userpassw.length()<6){
+        } else if (uPanico.isEmpty() || uPanico.length()<=9){
+            panico.setError("Entre un número de celular(Emer) correcto");
+            panico.requestFocus();
+        } else if (uCelular.isEmpty() || uCelular.length()<=9){
+            celular.setError("Entre un número de celular correcto");
+            celular.requestFocus();
+        } else if (uPassw.isEmpty() || uPassw.length()<6){
             passw.setError("Entre una contraseña correcta");
             passw.requestFocus();
-        } else if (!userpassw.equals(userpasswrepeat)){
+        } else if (!uPassw.equals(uPasswR)){
             repassw.setError("Las contraseñas no son iguales");
             repassw.requestFocus();
         } else {
+            mAuth = FirebaseAuth.getInstance();
+            mFirestore = FirebaseFirestore.getInstance();
             dialogo.setMessage("Registrando nuevo Usuario...");
             dialogo.setTitle("Registrando");
             dialogo.setCanceledOnTouchOutside(false);
             dialogo.show();
-            mAuth.createUserWithEmailAndPassword(usercorreo, userpassw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            String IMEIsys = SharedPreferencesUtils.getvariable(Registro.this,"IMEIsys");
+            mAuth.createUserWithEmailAndPassword(uCorreo, uPassw).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
-                        dialogo.dismiss();
-                        startActivity(new Intent(Registro.this, Login.class));
-                        Toast.makeText(Registro.this, "Registro Exitoso.", Toast.LENGTH_SHORT).show();
+                        mUser = mAuth.getCurrentUser();
+                        String userID = Objects.requireNonNull(mUser).getUid();
+                        DocumentReference docRef = mFirestore.collection("Users").document(userID);
+                        Map<String, Object> dataUser = new HashMap<>();
+                        dataUser.put("nombres", uNombre);
+                        dataUser.put("celular", uCelular);
+                        dataUser.put("panico", uPanico);
+                        dataUser.put("fechainsc", new Date().getTime());
+                        dataUser.put("IMEIsys", IMEIsys);
+                        docRef.set(dataUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                dialogo.dismiss();
+                                startActivity(new Intent(Registro.this, Home.class).putExtra(EXTRA_NOMBRES, uNombre).putExtra(EXTRA_CORREO, uCorreo));
+                                Toast.makeText(Registro.this, "Registro Exitoso.", Toast.LENGTH_LONG).show();
+                                finish();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(Registro.this, "No se pudo registrar el Usuario.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+
                     } else {
                         dialogo.dismiss();
                         Toast.makeText(Registro.this, ""+task.getException(), Toast.LENGTH_SHORT).show();

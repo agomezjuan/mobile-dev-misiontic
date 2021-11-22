@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.appvoto.tictaxi.Util.SharedPreferencesUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
@@ -32,9 +33,11 @@ public class Home extends AppCompatActivity {
         logout = findViewById(R.id.btn_logout);
         nombres = findViewById(R.id.tv_nombreUsu);
         correo = findViewById(R.id.tv_emailUsu);
+
         auth = FirebaseAuth.getInstance();
         correoUsu = getIntent().getStringExtra(EXTRA_CORREO);
         nombresUsu = getIntent().getStringExtra(EXTRA_NOMBRES);
+
         if(correoUsu == null){
             nombres.setText("Usuario no registrado Miguelito");
             correo.setText("Sin correo Miguelito");
@@ -47,6 +50,10 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 auth.signOut();
+                SharedPreferencesUtils.setvariable(Home.this,"nombreUser", "");
+                SharedPreferencesUtils.setvariable(Home.this, "celularUser", "");
+                SharedPreferencesUtils.setvariable(Home.this, "celularPanic", "");
+                SharedPreferencesUtils.setvariable(Home.this,"correo", "");
                 nombres.setText("");
                 correo.setText("");
                 startActivity(new Intent(Home.this, MainActivity.class));
@@ -56,7 +63,7 @@ public class Home extends AppCompatActivity {
     }
 
     public void irRegistro(View view) {
-        startActivity(new Intent(Home.this, Registro.class));
+        startActivity(new Intent(Home.this, MapaBase.class));
     }
 
 }
