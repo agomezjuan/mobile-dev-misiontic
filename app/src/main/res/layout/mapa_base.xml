@@ -10,23 +10,98 @@
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        mapbox:mapbox_cameraTargetLat = "4.6044"
-        mapbox:mapbox_cameraTargetLng = "-74.0701"
-        mapbox:mapbox_styleUrl = "mapbox://styles/mapbox/streets-v10"
-        mapbox:mapbox_cameraZoom = "15" />
-
-    <Button
-        android:id="@+id/startButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:background="@color/mapboxGrayLight"
-        android:enabled="false"
-        android:text="Iniciar Navegación"
         mapbox:layout_constraintBottom_toBottomOf="parent"
         mapbox:layout_constraintEnd_toEndOf="parent"
-        mapbox:layout_constraintStart_toStartOf="parent" />
+        mapbox:layout_constraintStart_toStartOf="parent"
+        mapbox:layout_constraintTop_toTopOf="parent"
+        mapbox:mapbox_cameraZoom="15">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom">
+
+            <ImageView
+                android:layout_width="196dp"
+                android:layout_height="69dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/tictaxi_rect"
+                mapbox:layout_constraintEnd_toEndOf="parent"
+                mapbox:layout_constraintHorizontal_bias="0.068"
+                mapbox:layout_constraintStart_toStartOf="parent"
+                mapbox:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/s"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginStart="16dp"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                mapbox:layout_constraintBottom_toTopOf="@+id/d"
+                mapbox:layout_constraintEnd_toEndOf="parent"
+                mapbox:layout_constraintHorizontal_bias="0.106"
+                mapbox:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/d"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="start"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                mapbox:layout_constraintBottom_toTopOf="@+id/distance_view"
+                mapbox:layout_constraintEnd_toEndOf="parent"
+                mapbox:layout_constraintHorizontal_bias="0.106"
+                mapbox:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/distance_view"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="start"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                mapbox:layout_constraintBottom_toTopOf="@+id/startButton"
+                mapbox:layout_constraintEnd_toEndOf="parent"
+                mapbox:layout_constraintHorizontal_bias="0.106"
+                mapbox:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/startButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="40dp"
+                android:background="@color/mapboxGrayLight"
+                android:enabled="false"
+                android:text="Iniciar Navegación"
+                mapbox:layout_constraintBottom_toBottomOf="parent"
+                mapbox:layout_constraintEnd_toEndOf="parent"
+                mapbox:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_locacion_search"
+                android:layout_width="wrap_content"
+                android:layout_height="500dp"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="16dp"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="@color/naranja"
+                android:contentDescription="Boton search"
+                android:src="@drawable/ic_buscar"
+                android:tint="@color/white"
+                mapbox:layout_constraintBottom_toBottomOf="parent"
+                mapbox:layout_constraintEnd_toEndOf="parent"
+                mapbox:layout_constraintHorizontal_bias="0.983"
+                mapbox:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.mapbox.mapboxsdk.maps.MapView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

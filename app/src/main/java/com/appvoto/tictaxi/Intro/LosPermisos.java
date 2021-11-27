@@ -127,10 +127,8 @@ public class LosPermisos extends AppCompatActivity {
                         // Verifica que tenga SDCard en el Celular y crear un archivo...
                         dirBase = isRemovableSDCardAvailable();
                         if (dirBase == null || dirBase.equals("/storage/extSdCard") || dirBase.equals("/storage/sdcard1")) {
-                            File externalStorageList[] = null;
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                                externalStorageList = getApplicationContext().getExternalFilesDirs(null);
-                            }
+                            File[] externalStorageList = null;
+                            externalStorageList = getApplicationContext().getExternalFilesDirs(null);
                             dirBase = null;
                             if (externalStorageList != null) {
                                 dirBase = externalStorageList[0].getAbsolutePath();
@@ -254,6 +252,7 @@ public class LosPermisos extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23 && !checkPermissionGranted()) {
             ActivityCompat.requestPermissions(LosPermisos.this, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.CALL_PHONE,
                     Manifest.permission.READ_PHONE_STATE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -264,15 +263,17 @@ public class LosPermisos extends AppCompatActivity {
 
     private boolean checkPermissionGranted() {
         int res0 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        int res1 = ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
-        int res2 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
-        int res3 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int res4 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int res1 = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        int res2 = ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
+        int res3 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+        int res4 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int res5 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
         return res0 == PackageManager.PERMISSION_GRANTED
                 && res1 == PackageManager.PERMISSION_GRANTED
                 && res2 == PackageManager.PERMISSION_GRANTED
                 && res3 == PackageManager.PERMISSION_GRANTED
-                && res4 == PackageManager.PERMISSION_GRANTED;
+                && res4 == PackageManager.PERMISSION_GRANTED
+                && res5 == PackageManager.PERMISSION_GRANTED;
     }
 
     public String isRemovableSDCardAvailable() {
@@ -288,10 +289,8 @@ public class LosPermisos extends AppCompatActivity {
         listEnvironmentVariableStoreSDCardRootDirectory.put(2, EXTERNAL_SDCARD_STORAGE);
         listEnvironmentVariableStoreSDCardRootDirectory.put(3, EXTERNAL_SD_STORAGE);
         listEnvironmentVariableStoreSDCardRootDirectory.put(4, EXTERNAL_STORAGE);
-        File externalStorageList[] = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-            externalStorageList = getApplicationContext().getExternalFilesDirs(null);
-        }
+        File[] externalStorageList = null;
+        externalStorageList = getApplicationContext().getExternalFilesDirs(null);
         String directory = null;
         int size = listEnvironmentVariableStoreSDCardRootDirectory.size();
         for (int i = 0; i < size; i++) {

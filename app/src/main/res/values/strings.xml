@@ -3,6 +3,8 @@
     <string name="facebook_app_id">1501509830228243</string>
     <string name="fb_login_protocol_scheme">fb1501509830228243</string>
     <string name="d_web_client_id" translatable="false">654371226709-0si9s8o89f7cr16a4snjndsggm8u29l3.apps.googleusercontent.com</string>
-    <string name="mapbox_access_token">sk.eyJ1IjoibWJ1ZW5vcCIsImEiOiJja3dhNnFrZGMxM2NiMnJwOTk0cHQzaTEzIn0.0G60gw-vvw0JTmUCt2NxjA</string>
+
+    <string name="access_token">pk.eyJ1IjoibWJ1ZW5vcCIsImEiOiJja3c2ZHh1Z3liZmZqMm9xcHAyMjczZWg1In0.A445rpqGvNPFa-lPYP1msg</string>
+    <string name="access_token_nav">sk.eyJ1IjoibWJ1ZW5vcCIsImEiOiJja3dhNnFrZGMxM2NiMnJwOTk0cHQzaTEzIn0.0G60gw-vvw0JTmUCt2NxjA</string>
 
 </resources>

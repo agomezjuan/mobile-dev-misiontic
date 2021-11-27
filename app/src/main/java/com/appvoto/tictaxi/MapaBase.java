@@ -1,149 +1,263 @@
 package com.appvoto.tictaxi;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.res.ResourcesCompat;
+
+import android.Manifest;
 import android.annotation.SuppressLint;
-import android.location.Location;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
-import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
-import com.mapbox.mapboxsdk.plugins.locationlayer.modes.CameraMode;
-import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.JsonObject;
+import com.mapbox.android.core.permissions.PermissionsListener;
+import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.api.directions.v5.DirectionsCriteria;
+import com.mapbox.api.directions.v5.MapboxDirections;
+import com.mapbox.api.directions.v5.models.DirectionsResponse;
+import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.api.geocoding.v5.GeocodingCriteria;
+import com.mapbox.api.geocoding.v5.MapboxGeocoding;
+import com.mapbox.api.geocoding.v5.models.CarmenFeature;
+import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
+import com.mapbox.core.constants.Constants;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.LineString;
+import com.mapbox.geojson.Point;
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
+import com.mapbox.mapboxsdk.location.modes.CameraMode;
+import com.mapbox.mapboxsdk.location.modes.RenderMode;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
+import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
+import com.mapbox.mapboxsdk.style.layers.LineLayer;
+import com.mapbox.mapboxsdk.style.layers.Property;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.mapboxsdk.utils.BitmapUtils;
+import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
+import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
+import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
+import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
+import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 
 import java.util.List;
 
-public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, LocationEngineListener,
-        PermissionsListener, MapboxMap.OnMapClickListener {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, PermissionsListener, MapboxMap.OnMapClickListener {
+
+    private static final int REQUEST_CODE_AUTOCOMPLETE = 7171;
     private MapView mapView;
-    private MapboxMap map;
-    private Button startButton;
+    private MapboxMap mapboxMap;
     private PermissionsManager permissionsManager;
-    private LocationEngine locationEngine;
-    private LocationLayerPlugin locationLayerPlugin;
-    private Location originLocation;
-    private Point originPosition;
-    private Point destinationPosition;
-    private Marker destinationMarker;
+    private LocationComponent locationComponent;
+    private DirectionsRoute currentRoute;
+    private static final String TAG = "DirectionsActivity";
     private NavigationMapRoute navigationMapRoute;
-    private static final String TAG = "mapaBase";
+    private Button btnStart;
+    private FloatingActionButton fab_location_search;
+    private String geoJsonSourceLayerId = "GeoJsonSourceLayerId";
+    private String symbolIconId = "SymbolIconId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Mapbox.getInstance(MapaBase.this, getString(R.string.mapbox_access_token));
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Mapbox.getInstance(this, getString(R.string.access_token));
         setContentView(R.layout.mapa_base);
-
-        val mapView = findViewById(R.id.mapView);
+        mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+    }
 
-        startButton = findViewById(R.id.startButton);
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    @Override
+    public void onMapReady(@NonNull MapboxMap mapboxMap) {
+        this.mapboxMap = mapboxMap;
+        mapboxMap.setStyle(getString(R.string.navigation_guidance_day), style -> {
+            enableLocationComponent(style);
+            addDestinationIconSymbolLayer(style);
+            mapboxMap.addOnMapClickListener(this);
+
+            btnStart = findViewById(R.id.startButton);
+            btnStart.setOnClickListener(v -> {
+                boolean simulateRoute = true;
                 NavigationLauncherOptions options = NavigationLauncherOptions.builder()
-                        .origin(originPosition)
-                        .destination(destinationPosition)
-                        .shouldSimulateRoute(true)
+                        .directionsRoute(currentRoute)
+                        .shouldSimulateRoute(simulateRoute)
                         .build();
-                NavigationLauncher.startNavigation(MapaBase.this, options);
-            }
+
+                // Call this method with Context from within an Activity
+                NavigationLauncher.startNavigation(this, options);
+            });
+
+            initSearchFab();
+
+            setUpSource(style);
+
+            setUpLayer(style);
+
+            Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null);
+            Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
+            style.addImage(symbolIconId, bitmap);
+        });
+    }
+
+    private void setUpLayer(Style loadedMapStyle) {
+        loadedMapStyle.addLayer(new SymbolLayer("SYMBOL_LAYER_ID", geoJsonSourceLayerId).withProperties(iconImage(symbolIconId),
+                iconOffset(new Float[]{0f, -8f})));
+    }
+
+    private void setUpSource(Style loadedMapStyle) {
+        loadedMapStyle.addSource(new GeoJsonSource(geoJsonSourceLayerId));
+    }
+
+    private void initSearchFab() {
+        fab_location_search = findViewById(R.id.fab_locacion_search);
+        fab_location_search.setOnClickListener(v -> {
+            Intent intent = new PlaceAutocomplete.IntentBuilder()
+                    .accessToken(Mapbox.getAccessToken() != null ? Mapbox.getAccessToken() : getString(R.string.access_token))
+                    .placeOptions(PlaceOptions.builder()
+                            .backgroundColor(Color.parseColor("#EEEEEE"))
+                            .limit(10)
+                            .build(PlaceOptions.MODE_CARDS))
+                    .build(this);
+
+            startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
         });
     }
 
     @Override
-    public void onMapReady(MapboxMap mapboxMap) {
-        map = mapboxMap;
-        map.addOnMapClickListener(MapaBase.this);
-        enableLocation();
-    }
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_AUTOCOMPLETE) {
+            /*Retrieve selected location's CarmenFeature*/
+            CarmenFeature selectedCarmenFeature = PlaceAutocomplete.getPlace(data);
 
-    private void enableLocation(){
-        if (PermissionsManager.areLocationPermissionsGranted(MapaBase.this)){
-            initializeLocationEngine();
-            initializeLocationLayer();
-        } else {
-            permissionsManager = new PermissionsManager(MapaBase.this);
-            permissionsManager.requestLocationPermissions(MapaBase.this);
+            /*Create a new FeatureCollection and add a new Feature to it using selectedCarmenFeature above.
+             * Then retrieve and update the source designated for showing a selected location's symbol layer icon*/
+            if (mapboxMap != null) {
+                Style style = mapboxMap.getStyle();
+                if (style != null) {
+                    GeoJsonSource source = style.getSourceAs(geoJsonSourceLayerId);
+                    if (source != null) {
+                        source.setGeoJson(FeatureCollection.fromFeatures(new Feature[]{Feature.fromJson(selectedCarmenFeature.toJson())}));
+                    }
+
+                    /*Move map camera to the selected location*/
+                    mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                            .target(new LatLng(((Point) selectedCarmenFeature.geometry()).latitude(),
+                                    ((Point) selectedCarmenFeature.geometry()).longitude())).zoom(14)
+                            .build()), 4000);
+                }
+            }
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private void initializeLocationEngine(){
-        locationEngine = new LocationEngineProvider(MapaBase.this).obtainBestLocationEngineAvailable();
-        locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
-        locationEngine.activate();
+    private void addDestinationIconSymbolLayer(Style loadedMapStyle) {
+        loadedMapStyle.addImage("destination-icon-id", BitmapFactory.decodeResource(this.getResources(),
+                R.drawable.mapbox_marker_icon_default));
+        GeoJsonSource geoJsonSource = new GeoJsonSource("destination-source-id");
+        loadedMapStyle.addSource(geoJsonSource);
 
-        Location lastLocation = locationEngine.getLastLocation();
-        if (lastLocation != null){
-            originLocation = lastLocation;
-            setCameraPosition(lastLocation);
-        } else {
-            locationEngine.addLocationEngineListener(MapaBase.this);
-        }
-    }
-
-    @SuppressLint({"MissingPermission", "WrongConstant"})
-    private void initializeLocationLayer(){
-        locationLayerPlugin = new LocationLayerPlugin(mapView, map, locationEngine);
-        locationLayerPlugin.setLocationLayerEnabled(true);
-        locationLayerPlugin.setCameraMode(CameraMode.TRACKING);
-        locationLayerPlugin.setRenderMode(RenderMode.NORMAL);
-    }
-
-    private void setCameraPosition(Location location){
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
-                location.getLongitude()), 15.0));
+        SymbolLayer destinationSymbolLayer = new SymbolLayer("destination-symbol-layer-id", "destination-source-id");
+        destinationSymbolLayer.withProperties(iconImage("destination-icon-id"),
+                iconAllowOverlap(true),
+                iconIgnorePlacement(true));
+        loadedMapStyle.addLayer(destinationSymbolLayer);
     }
 
     @Override
-    public void onMapClick(@NonNull LatLng point) {
+    public boolean onMapClick(@NonNull LatLng point) {
+        Point destinationPoint = Point.fromLngLat(point.getLongitude(), point.getLatitude());
+        Point originPoint = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(),
+                locationComponent.getLastKnownLocation().getLatitude());
 
-        if (destinationMarker != null){
-            map.removeMarker(destinationMarker);
+        GeoJsonSource source = mapboxMap.getStyle().getSourceAs("destination-source-id");
+        if (source != null) {
+            source.setGeoJson(Feature.fromGeometry(destinationPoint));
         }
-        if (originLocation == null){
-            originPosition = Point.fromLngLat(point.getLongitude(), point.getLatitude());;
-        } else {
-            originPosition = Point.fromLngLat(originLocation.getLongitude(), originLocation.getLatitude());
-        }
-        destinationMarker = map.addMarker(new MarkerOptions().position(point));
 
-        destinationPosition = Point.fromLngLat(point.getLongitude(), point.getLatitude());
-
-
-        getRoute(originPosition, destinationPosition);
-        startButton.setEnabled(true);
-        startButton.setBackgroundResource(R.color.mapboxBlue);
+        getRoute(originPoint, destinationPoint);
+        btnStart.setEnabled(true);
+        btnStart.setBackgroundResource(R.color.mapboxBlue);
+        return true;
     }
 
-    private void getRoute(Point origin, Point destino){
-        NavigationRoute.builder()
-                .accessToken(Mapbox.getAccessToken())
+    private void getRoute(Point origin, Point destination) {
+        NavigationRoute.builder(this).accessToken(Mapbox.getAccessToken())
                 .origin(origin)
-                .destination(destino)
+                .destination(destination)
                 .build()
                 .getRoute(new Callback<DirectionsResponse>() {
                     @Override
                     public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-                        if (response.body() == null){
-                            Log.e(TAG, "Router no responde. Chequear usuario y token.");
+                        // You can get the generic HTTP info about the response
+                        Log.d(TAG, "Response code: " + response.code());
+                        if (response.body() == null) {
+                            Log.d(TAG, "No routes found, make sure you set the right user and access token.");
                             return;
-                        } else if (response.body().routes().size() == 0){
-                            Log.e(TAG, "Router sin funcionar");
+                        } else if (response.body().routes().size() < 1) {
+                            Log.e(TAG, "No routes found");
                             return;
                         }
-                        DirectionsRoute currentRoute = response.body().routes().get(0);
-                        if (navigationMapRoute != null){
+
+                        currentRoute = response.body().routes().get(0);
+                        double distance = currentRoute.distance() / 1000;
+                        double tiempo = currentRoute.duration() /60;
+                        double precio = calcularprecio(tiempo, distance);
+                        String st = String.format("Distancia: %.2f K.M.", distance);
+                        String tmpo = String.format("Tiempo: %.2f Min.", tiempo);
+                        String pprecio = String.format("Valor: $%.2f pesos.", precio);
+                        TextView dv = findViewById(R.id.distance_view);
+                        TextView mitiempo = findViewById(R.id.d);
+                        TextView preciocarrera = findViewById(R.id.s);
+                        preciocarrera.setText(pprecio);
+                        mitiempo.setText(tmpo);
+                        dv.setText(st);
+
+                        // Draw the route on the map
+                        if (navigationMapRoute != null) {
                             navigationMapRoute.removeRoute();
                         } else {
-                            navigationMapRoute = new NavigationMapRoute(null, mapView, map);
+                            navigationMapRoute = new NavigationMapRoute(null, mapView, mapboxMap, R.style.NavigationMapRoute);
                         }
                         navigationMapRoute.addRoute(currentRoute);
                     }
@@ -155,47 +269,63 @@ public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, L
                 });
     }
 
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onConnected() {
-        locationEngine.requestLocationUpdates();
+    private double calcularprecio(double tiempo, double distance) {
+        if (distance < 2.2){
+            return 5000.0;
+        } else {
+            double banderazo = 2400.0;
+            double espep = 85.0;
+            double valormts = distance * 850.0;
+            double minima = 4200.0;
+            double recargopuesto = 800.0;
+
+            return banderazo + espep + valormts + recargopuesto;
+        }
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        if (location != null){
-            originLocation = location;
-            setCameraPosition(location);
+
+    @SuppressWarnings("MissingPermission")
+    private void enableLocationComponent(Style loadedMapStyle) {
+        /*Check if permissions are enabled and if not request*/
+        if (PermissionsManager.areLocationPermissionsGranted(this)) {
+            // Activate the MapboxMap LocationComponent to show user location
+            // Adding in LocationComponentOptions is also an optional parameter
+            locationComponent = mapboxMap.getLocationComponent();
+            locationComponent.activateLocationComponent(this, loadedMapStyle);
+            locationComponent.setLocationComponentEnabled(true);
+
+            //Set the component's camera mode
+            locationComponent.setCameraMode(CameraMode.TRACKING);
+        } else {
+            permissionsManager = new PermissionsManager(this);
+            permissionsManager.requestLocationPermissions(this);
         }
     }
 
     @Override
     public void onExplanationNeeded(List<String> permissionsToExplain) {
-
+        Toast.makeText(this, "Necesitamos permisos para esta app", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onPermissionResult(boolean granted) {
-        if (granted){
-            enableLocation();
+        if (granted) {
+            enableLocationComponent(mapboxMap.getStyle());
+        } else {
+            Toast.makeText(this, "No nos has otorgado permisos", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    @SuppressLint("MissingPermission")
     @Override
     protected void onStart() {
         super.onStart();
-        if (locationEngine != null){
-            locationEngine.requestLocationUpdates();
-        }
-        if (locationLayerPlugin != null){
-            locationLayerPlugin.onStart();
-        }
         mapView.onStart();
     }
 
@@ -214,33 +344,24 @@ public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, L
     @Override
     protected void onStop() {
         super.onStop();
-        if (locationEngine != null){
-            locationEngine.removeLocationUpdates();
-        }
-        if (locationLayerPlugin != null){
-            locationLayerPlugin.onStop();
-        }
         mapView.onStop();
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
         mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (locationEngine != null){
-            locationEngine.deactivate();
-        }
-        mapView.onDestroy();
     }
 }

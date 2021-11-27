@@ -39,8 +39,15 @@ public class Home extends AppCompatActivity {
         nombresUsu = getIntent().getStringExtra(EXTRA_NOMBRES);
 
         if(correoUsu == null){
-            nombres.setText("Usuario no registrado Miguelito");
-            correo.setText("Sin correo Miguelito");
+            String nombreUser = SharedPreferencesUtils.getvariable(Home.this, "nombreUser");
+            String correoUser = SharedPreferencesUtils.getvariable(Home.this, "correo");
+            if (nombreUser.equals("") || nombreUser == null) {
+                nombres.setText("Usuario no registrado Miguelito");
+                correo.setText("Sin correo Miguelito");
+            } else {
+                nombres.setText(nombreUser);
+                correo.setText(correoUser);
+            }
         } else {
             nombres.setText(nombresUsu);
             correo.setText(correoUsu);

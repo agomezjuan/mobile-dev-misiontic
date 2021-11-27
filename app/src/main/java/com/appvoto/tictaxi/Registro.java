@@ -75,12 +75,6 @@ public class Registro extends AppCompatActivity {
         correo = findViewById(R.id.et_correo_reg); //
         passw = findViewById(R.id.et_passw_reg); //
         repassw = findViewById(R.id.et_passwrepeat_reg); //
-        /*nombres.setText("Miguel Angel Bueno Perez");
-        celular.setText("3154485686");
-        panico.setText("3142655116");
-        correo.setText("buenoperez.miguelangel@gmail.com");
-        passw.setText("123456789");
-        repassw.setText("123456789");*/
 
         registro = findViewById(R.id.btn_registrar);
         login_reg = findViewById(R.id.btn_registro_log);
