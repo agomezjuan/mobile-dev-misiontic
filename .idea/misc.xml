@@ -7,12 +7,14 @@
         <entry key="app/src/main/res/drawable/ic_btn_redondo1.xml" value="0.3333333333333333" />
         <entry key="app/src/main/res/drawable/ic_celular_rojo.xml" value="0.2989583333333333" />
         <entry key="app/src/main/res/drawable/ic_nombres.xml" value="0.2989583333333333" />
+        <entry key="app/src/main/res/drawable/ic_panico.xml" value="0.3182291666666667" />
+        <entry key="app/src/main/res/drawable/ic_panico_w.xml" value="0.3182291666666667" />
         <entry key="app/src/main/res/drawable/ic_pass.xml" value="0.2989583333333333" />
         <entry key="app/src/main/res/drawable/tex_white.xml" value="0.2989583333333333" />
         <entry key="app/src/main/res/layout/activity_github_auth.xml" value="0.2828125" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.2828125" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_phone_auth.xml" value="0.2784615384615385" />
         <entry key="app/src/main/res/layout/activity_twitter_auth.xml" value="0.2784615384615385" />
         <entry key="app/src/main/res/layout/facebook_auth.xml" value="0.2828125" />
@@ -22,6 +24,8 @@
         <entry key="app/src/main/res/layout/login.xml" value="0.2828125" />
         <entry key="app/src/main/res/layout/los_permisos.xml" value="0.25" />
         <entry key="app/src/main/res/layout/mapa_base.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/mapa_optimization.xml" value="0.20380434782608695" />
+        <entry key="app/src/main/res/layout/permisos.xml" value="0.26851851851851855" />
         <entry key="app/src/main/res/layout/phone_auth.xml" value="0.335" />
         <entry key="app/src/main/res/layout/phone_smsactivity.xml" value="0.2784615384615385" />
         <entry key="app/src/main/res/layout/registro.xml" value="0.2828125" />

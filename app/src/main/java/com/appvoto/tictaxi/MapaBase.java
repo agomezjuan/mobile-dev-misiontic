@@ -10,14 +10,11 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -28,59 +25,57 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.JsonObject;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
-import com.mapbox.api.directions.v5.DirectionsCriteria;
-import com.mapbox.api.directions.v5.MapboxDirections;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.geocoding.v5.GeocodingCriteria;
-import com.mapbox.api.geocoding.v5.MapboxGeocoding;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
-import com.mapbox.api.geocoding.v5.models.GeocodingResponse;
-import com.mapbox.core.constants.Constants;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
-import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
-import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
-import com.mapbox.mapboxsdk.style.layers.LineLayer;
-import com.mapbox.mapboxsdk.style.layers.Property;
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
-import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
+
+/**
+ * Created by miguelangelbuenoperez on 03/12/21...
+ */
 
 public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, PermissionsListener, MapboxMap.OnMapClickListener {
 
@@ -90,12 +85,17 @@ public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, P
     private PermissionsManager permissionsManager;
     private LocationComponent locationComponent;
     private DirectionsRoute currentRoute;
-    private static final String TAG = "DirectionsActivity";
     private NavigationMapRoute navigationMapRoute;
     private Button btnStart;
     private FloatingActionButton fab_location_search;
     private String geoJsonSourceLayerId = "GeoJsonSourceLayerId";
     private String symbolIconId = "SymbolIconId";
+    private Point originPoint = Point.fromLngLat(4.604558, -74.070221);
+    private double increHora, increDia, precio;
+    private String tmpo, ppprecio;
+    private SwitchMaterial festivo, terminal;
+    private TextView preciocarrera, ampm;
+    private LinearLayout festiTerminal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +103,7 @@ public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, P
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         Mapbox.getInstance(this, getString(R.string.access_token));
         setContentView(R.layout.mapa_base);
+
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -124,11 +125,12 @@ public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, P
                         .shouldSimulateRoute(simulateRoute)
                         .build();
 
-                // Call this method with Context from within an Activity
                 NavigationLauncher.startNavigation(this, options);
             });
 
             initSearchFab();
+            iniFestivo();
+            iniTerminal();
 
             setUpSource(style);
 
@@ -137,6 +139,46 @@ public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, P
             Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.marker, null);
             Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
             style.addImage(symbolIconId, bitmap);
+        });
+    }
+
+    private void iniFestivo(){
+        festivo = findViewById(R.id.sw_festivo);
+        festivo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    precio += 2000.0;
+                    DecimalFormat formato2 = new DecimalFormat("$#,###.00");
+                    ppprecio = formato2.format(precio);
+                    preciocarrera.setText(ppprecio);
+                } else {
+                    precio -= 2000.0;
+                    DecimalFormat formato2 = new DecimalFormat("$#,###.00");
+                    ppprecio = formato2.format(precio);
+                    preciocarrera.setText(ppprecio);
+                }
+            }
+        });
+    }
+
+    private void iniTerminal(){
+        terminal = findViewById(R.id.sw_terminal);
+        terminal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    precio += 4200.0;
+                    DecimalFormat formato2 = new DecimalFormat("$#,###.00");
+                    ppprecio = formato2.format(precio);
+                    preciocarrera.setText(ppprecio);
+                } else {
+                    precio -= 4200.0;
+                    DecimalFormat formato2 = new DecimalFormat("$#,###.00");
+                    ppprecio = formato2.format(precio);
+                    preciocarrera.setText(ppprecio);
+                }
+            }
         });
     }
 
@@ -152,6 +194,7 @@ public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, P
     private void initSearchFab() {
         fab_location_search = findViewById(R.id.fab_locacion_search);
         fab_location_search.setOnClickListener(v -> {
+            /*
             Intent intent = new PlaceAutocomplete.IntentBuilder()
                     .accessToken(Mapbox.getAccessToken() != null ? Mapbox.getAccessToken() : getString(R.string.access_token))
                     .placeOptions(PlaceOptions.builder()
@@ -161,6 +204,8 @@ public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, P
                     .build(this);
 
             startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
+             */
+            finish();
         });
     }
 
@@ -168,11 +213,9 @@ public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, P
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_AUTOCOMPLETE) {
-            /*Retrieve selected location's CarmenFeature*/
+
             CarmenFeature selectedCarmenFeature = PlaceAutocomplete.getPlace(data);
 
-            /*Create a new FeatureCollection and add a new Feature to it using selectedCarmenFeature above.
-             * Then retrieve and update the source designated for showing a selected location's symbol layer icon*/
             if (mapboxMap != null) {
                 Style style = mapboxMap.getStyle();
                 if (style != null) {
@@ -181,7 +224,6 @@ public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, P
                         source.setGeoJson(FeatureCollection.fromFeatures(new Feature[]{Feature.fromJson(selectedCarmenFeature.toJson())}));
                     }
 
-                    /*Move map camera to the selected location*/
                     mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
                             .target(new LatLng(((Point) selectedCarmenFeature.geometry()).latitude(),
                                     ((Point) selectedCarmenFeature.geometry()).longitude())).zoom(14)
@@ -207,8 +249,12 @@ public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, P
     @Override
     public boolean onMapClick(@NonNull LatLng point) {
         Point destinationPoint = Point.fromLngLat(point.getLongitude(), point.getLatitude());
-        Point originPoint = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(),
-                locationComponent.getLastKnownLocation().getLatitude());
+        if (locationComponent.getLastKnownLocation() != null) {
+            originPoint = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(),
+                    locationComponent.getLastKnownLocation().getLatitude());
+        } else {
+            Toast.makeText(MapaBase.this, "Temes un problema de GPS o de actualización de la APP. Desinstala la APP, reinicie su celular y vuelva a abrir.", Toast.LENGTH_LONG).show();
+        }
 
         GeoJsonSource source = mapboxMap.getStyle().getSourceAs("destination-source-id");
         if (source != null) {
@@ -229,31 +275,46 @@ public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, P
                 .getRoute(new Callback<DirectionsResponse>() {
                     @Override
                     public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-                        // You can get the generic HTTP info about the response
-                        Log.d(TAG, "Response code: " + response.code());
+
                         if (response.body() == null) {
-                            Log.d(TAG, "No routes found, make sure you set the right user and access token.");
                             return;
                         } else if (response.body().routes().size() < 1) {
-                            Log.e(TAG, "No routes found");
                             return;
                         }
 
                         currentRoute = response.body().routes().get(0);
                         double distance = currentRoute.distance() / 1000;
                         double tiempo = currentRoute.duration() /60;
-                        double precio = calcularprecio(tiempo, distance);
-                        String st = String.format("Distancia: %.2f K.M.", distance);
-                        String tmpo = String.format("Tiempo: %.2f Min.", tiempo);
-                        String pprecio = String.format("Valor: $%.2f pesos.", precio);
+                        double residuo = currentRoute.duration() % 60;
+
+                        ampm = findViewById(R.id.tv_ampm);
+                        precio = calcularprecio(tiempo, distance);
+
+                        DecimalFormat formato = new DecimalFormat("$#,###.00");
+                        ppprecio = formato.format(precio);
+
+                        String st = String.format("%.2f Kms", distance);
+                        if (residuo == 0){
+                            tmpo = String.format("%.0f Minutos", tiempo);
+                        } else {
+                            tmpo = String.format("%.0f Min %.0f Seg", tiempo, residuo);
+                        }
                         TextView dv = findViewById(R.id.distance_view);
                         TextView mitiempo = findViewById(R.id.d);
-                        TextView preciocarrera = findViewById(R.id.s);
-                        preciocarrera.setText(pprecio);
+                        festiTerminal = findViewById(R.id.ly_festiterminal);
+                        preciocarrera = findViewById(R.id.s);
+                        TextView distanciatv = findViewById(R.id.tv_distancia);
+                        TextView tiempotv = findViewById(R.id.tv_tiempo);
+                        TextView preciotv = findViewById(R.id.tv_precio);
+
+                        distanciatv.setText("Distancia");
+                        tiempotv.setText("Tiempo");
+                        preciotv.setText("Precio");
+                        preciocarrera.setText(ppprecio);
                         mitiempo.setText(tmpo);
                         dv.setText(st);
+                        festiTerminal.setVisibility(View.VISIBLE);
 
-                        // Draw the route on the map
                         if (navigationMapRoute != null) {
                             navigationMapRoute.removeRoute();
                         } else {
@@ -264,37 +325,53 @@ public class MapaBase extends AppCompatActivity implements OnMapReadyCallback, P
 
                     @Override
                     public void onFailure(Call<DirectionsResponse> call, Throwable t) {
-                        Log.e(TAG, "Error: " + t.getMessage());
+                        Timber.e("Error: " + t.getMessage());
                     }
                 });
     }
 
     private double calcularprecio(double tiempo, double distance) {
+        SimpleDateFormat diasalida = new SimpleDateFormat("E", Locale.getDefault());
+        SimpleDateFormat horasalida = new SimpleDateFormat("HH", Locale.getDefault());
+        Date date = new Date();
+
+        String diamig = diasalida.format(date);
+        int horamig = Integer.parseInt(horasalida.format(date));
+        if(horamig > 20 || horamig <= 4 ){
+            ampm.setText("Nocturno");
+            increHora = 2000.0;
+        } else {
+            ampm.setText("Normal");
+            increHora = 0.0;
+        }
+        if (diamig.equals("Sun")){
+            increDia = 2000.0;
+        } else {
+            increDia = 0.0;
+        }
         if (distance < 2.2){
-            return 5000.0;
+            double minima = 4200.0;
+            double puertaapuerta = 800.0;
+            return minima + puertaapuerta + increDia + increHora;
         } else {
             double banderazo = 2400.0;
-            double espep = 85.0;
+            double espep = 85.0 * (distance / 80.0);
             double valormts = distance * 850.0;
-            double minima = 4200.0;
             double recargopuesto = 800.0;
-
-            return banderazo + espep + valormts + recargopuesto;
+            return banderazo + espep + valormts + recargopuesto + increDia + increHora;
         }
     }
 
 
     @SuppressWarnings("MissingPermission")
     private void enableLocationComponent(Style loadedMapStyle) {
-        /*Check if permissions are enabled and if not request*/
+
         if (PermissionsManager.areLocationPermissionsGranted(this)) {
-            // Activate the MapboxMap LocationComponent to show user location
-            // Adding in LocationComponentOptions is also an optional parameter
+
             locationComponent = mapboxMap.getLocationComponent();
             locationComponent.activateLocationComponent(this, loadedMapStyle);
             locationComponent.setLocationComponentEnabled(true);
 
-            //Set the component's camera mode
             locationComponent.setCameraMode(CameraMode.TRACKING);
         } else {
             permissionsManager = new PermissionsManager(this);
